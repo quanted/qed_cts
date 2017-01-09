@@ -88,3 +88,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# QED settings
+secret_key_django_dropbox.txt
