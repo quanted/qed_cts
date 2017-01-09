@@ -1,0 +1,9 @@
+[submodule "templates_qed"]
+	path = templates_qed
+	url = https://github.com/quanted/templates_qed.git
+[submodule "static_qed"]
+	path = static_qed
+	url = https://github.com/quanted/static_qed.git
+[submodule "cts_app"]
+	path = cts_app
+	url = https://github.com/quanted/cts_app.git
