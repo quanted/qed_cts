@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'cts_app',  # cts django app
     'cts_app.filters',  # cts filters for pchem table
     'splash_app',
+    'ubertool_app',
 )
 
 # This breaks the pattern of a "pluggable" TEST_CTS django app, but it also makes it convenient to describe the server hosting the TEST API.
