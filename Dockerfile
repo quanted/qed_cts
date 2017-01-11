@@ -1,11 +1,13 @@
 # Hosts django project w/ uwsgi
 
-FROM python:2.7
+#FROM python:2.7
+FROM puruckertom/uber_py27
 
 # Install Python Dependencies
 # COPY requirements.txt /tmp/
 COPY . /src/
-RUN pip install --requirement /src/cts_app/requirements.txt
+RUN pip install --requirement /src/requirements.txt
+#RUN for file in *_app/requirements.txt; do pip install --requirement /src/$file; done
 
 # Install uWSGI
 RUN pip install uwsgi

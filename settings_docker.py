@@ -122,8 +122,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'cts_app',
     'cts_app.filters',
-    'splash_app',
     'ubertool_app',
+    'splash_app',
 )
 
 MIDDLEWARE_CLASSES = (
