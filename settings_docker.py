@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'cts_app',
     'cts_app.filters',
+    'splash_app',
 )
 
 MIDDLEWARE_CLASSES = (

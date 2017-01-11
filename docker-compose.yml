@@ -6,7 +6,7 @@
   # QED Django front-end
   qed_django:
     build: .
-    image: cts-uwsgi-django:latest
+    image: qed-uwsgi-django:latest
     expose:
     - "8080"
     volumes:

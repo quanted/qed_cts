@@ -8,5 +8,6 @@ from django.conf.urls import include, url
 print('qed.urls')
 #appends to the list of url patterns to check against
 urlpatterns = [
+	url(r'^', include('splash_app.urls')),
     url(r'^cts/', include('cts_app.urls')),
 ]
