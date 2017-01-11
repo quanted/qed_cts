@@ -47,11 +47,17 @@ if not os.environ.get('UBERTOOL_REST_SERVER'):
     print("REST backend = http://localhost:7777")
 
 # SECURITY WARNING: we keep the secret key in a shared dropbox directory
-with open('secret_key_django_dropbox.txt') as f:
-    SECRET_KEY = f.read().strip()
+try:
+    with open('secret_key_django_dropbox.txt') as f:
+        SECRET_KEY = f.read().strip()
+except IOError as e:
+    print "Could not find secret file"
+    SECRET_KEY = 'Shhhhhhhhhhhhhhh'
+    pass
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = False
 
