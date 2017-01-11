@@ -51,8 +51,7 @@ with open('secret_key_django_dropbox.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+DEBUG = False
 
 TEMPLATE_DEBUG = False
 

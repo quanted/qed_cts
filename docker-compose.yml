@@ -5,12 +5,13 @@
 
   # ubertool_cts Django front-end
   cts_django:
-    build: ./cts_app
+    build: .
     image: cts-uwsgi-django:latest
     expose:
     - "8081"
     volumes:
     - collected_static:/src/collected_static
+    # - collected_static:/src/static_qed
     # - .:/src  # map ubertool_cts/ to /src for updating without rebuilding images
     environment:
     - REDIS_HOSTNAME=redis
@@ -112,6 +113,7 @@
       - "443:443"
     links:
       - cts_django:uwsgi         # Nginx.conf can reference "cts_django" service with the hostname 'uwsgi' or 'cts_django'
+      - cts_nodejs:cts_nodejs
     volumes:
       - /var/www/nginx/certs:/etc/nginx/qed
     volumes_from:

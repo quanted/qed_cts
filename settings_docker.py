@@ -18,6 +18,7 @@ MACHINE_ID = socket.gethostname()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+TEMPLATE_ROOT = os.path.join(PROJECT_ROOT, 'templates_qed/')
 
 # Define ENVIRONMENTAL VARIABLES for project (replaces the app.yaml)
 os.environ.update({
@@ -36,23 +37,27 @@ os.environ.update({
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
     'CTS_TEST_SERVER': 'http://172.20.100.16:8080'
 })
+
+# cts_api addition:
+NODEJS_HOST = 'nginx'
+NODEJS_PORT = 80
+# todo: look into ws w/ django 1.10
+
 if not os.environ.get('UBERTOOL_REST_SERVER'):
     os.environ.update({'UBERTOOL_REST_SERVER': 'http://nginx:7777'})  # Docker network
     print("REST backend = http://nginx:7777")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!  <-- We do not use this for anything
-# try:
-#     import secret
-#     SECRET_KEY = secret.SECRET_KEY
-# except ImportError:
-#     SECRET_KEY = "ShhhDontTellAnyone"
     
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('splash_app/secret_key_django_dropbox.txt') as f:
-    SECRET_KEY = f.read().strip()
+try:
+    with open('secret_key_django_dropbox.txt') as f:
+        SECRET_KEY = f.read().strip()
+except IOError as e:
+    print "Could not find secret file"
+    SECRET_KEY = 'Shhhhhhhhhhhhhhh'
+    pass
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -84,7 +89,13 @@ APPEND_SLASH = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_ROOT, 'templates')],
+        'DIRS': [os.path.join(TEMPLATE_ROOT, 'splash'),
+                 os.path.join(TEMPLATE_ROOT, 'drupal_2017'),
+                 os.path.join(TEMPLATE_ROOT, 'cts'),
+                 os.path.join(TEMPLATE_ROOT, 'drupal_2014'),
+                 os.path.join(TEMPLATE_ROOT, 'uber2017'),
+                 os.path.join(TEMPLATE_ROOT, 'uber2011'),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,20 +118,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     # 'django.contrib.messages',
     'django.contrib.staticfiles',
-    'docs',
-    'api',
-    'models.terrplant',
-    'models.sip',
-    'models.stir',
-    'models.trex',
-    'models.therps',
-    'models.iec',
-    'models.earthworm',
-    'models.rice',
-    'models.kabam',
-    'models.ore',
-    'models.hwbi',
-    'cts_api'
+    'cts_app',
+    'cts_app.filters',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -134,7 +133,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
-WSGI_APPLICATION = 'wsgi_apache.application'
+WSGI_APPLICATION = 'wsgi_docker.application'
 
 
 # Database
@@ -186,7 +185,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(PROJECT_ROOT, 'static_qed'),
 )
 
 STATICFILES_FINDERS = (
@@ -195,8 +194,12 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+# STATIC_ROOT = '/src/collected_static/'
+
+STATIC_URL = '/static_qed/'
 STATIC_ROOT = '/src/collected_static/'
+
 
 # print 'BASE_DIR = %s' %BASE_DIR
 # print 'PROJECT_ROOT = %s' %PROJECT_ROOT
@@ -207,3 +210,10 @@ STATIC_ROOT = '/src/collected_static/'
 DOCS_ROOT = os.path.join(PROJECT_ROOT, 'docs', '_build', 'html')
 
 DOCS_ACCESS = 'public'
+
+try:
+    import settings_local
+    print("Importing additional local settings")
+except ImportError:
+    print("No local settings")
+    pass
