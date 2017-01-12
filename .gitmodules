@@ -13,3 +13,6 @@
 [submodule "ubertool_app"]
 	path = ubertool_app
 	url = https://github.com/quanted/ubertool_app.git
+[submodule "qed_nginx"]
+	path = qed_nginx
+	url = https://github.com/puruckertom/qed_nginx.git

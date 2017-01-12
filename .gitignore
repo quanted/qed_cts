@@ -94,3 +94,6 @@ secret_key_django_dropbox.txt
 
 # DB stuff
 *.sqlite3
+
+# CTS related
+*.cxl
