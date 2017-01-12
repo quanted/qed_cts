@@ -16,3 +16,6 @@
 [submodule "qed_nginx"]
 	path = qed_nginx
 	url = https://github.com/puruckertom/qed_nginx.git
+[submodule "ubertool_ecorest"]
+	path = ubertool_ecorest
+	url = https://github.com/quanted/ubertool_ecorest.git
