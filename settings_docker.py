@@ -45,7 +45,7 @@ NODEJS_PORT = 80
 # todo: look into ws w/ django 1.10
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
-    os.environ.update({'UBERTOOL_REST_SERVER': 'http://nginx:7777'})  # Docker network
+    os.environ.update({'UBERTOOL_REST_SERVER': 'http://cts_nginx:7777'})  # Docker network
     print("REST backend = http://nginx:7777")
 
 # Quick-start development settings - unsuitable for production
