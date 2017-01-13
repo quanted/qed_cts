@@ -24,6 +24,7 @@ pillow
 pypdf2
 python-coveralls
 selenium
+six
 Sphinx
 tabulate
 xlsxwriter
