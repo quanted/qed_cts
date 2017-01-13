@@ -98,6 +98,7 @@ TEMPLATES = [
                  os.path.join(TEMPLATE_ROOT, 'drupal_2014'),
                  os.path.join(TEMPLATE_ROOT, 'uber2017'),
                  os.path.join(TEMPLATE_ROOT, 'uber2011'),
+                 os.path.join(TEMPLATE_ROOT, 'hwbi'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
