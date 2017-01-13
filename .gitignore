@@ -97,3 +97,6 @@ secret_key_django_dropbox.txt
 
 # CTS related
 *.cxl
+
+# pycharm stuff
+.idea
