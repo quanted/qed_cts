@@ -19,3 +19,6 @@
 [submodule "ubertool_ecorest"]
 	path = ubertool_ecorest
 	url = https://github.com/quanted/ubertool_ecorest.git
+[submodule "hwbi_app"]
+	path = hwbi_app
+	url = https://github.com/quanted/hwbi_app.git
