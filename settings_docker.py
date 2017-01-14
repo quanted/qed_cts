@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'cts_app.filters',
     'ubertool_app',
     'splash_app',
+    'hwbi_app',
 )
 
 MIDDLEWARE_CLASSES = (

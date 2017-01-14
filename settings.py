@@ -38,8 +38,7 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://134.67.114.2',
     'CTS_EFS_SERVER': 'http://134.67.114.2',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    'CTS_VERSION': '1.5.0'
-
+    'CTS_VERSION': '1.8'
 })
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
@@ -83,6 +82,7 @@ TEMPLATES = [
                  os.path.join(TEMPLATE_ROOT, 'drupal_2014'),
                  os.path.join(TEMPLATE_ROOT, 'uber2017'),
                  os.path.join(TEMPLATE_ROOT, 'uber2011'),
+                 os.path.join(TEMPLATE_ROOT, 'hwbi'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -101,9 +101,9 @@ TEMPLATES = [
 INSTALLED_APPS = (
     #'cts_api',
     #'cts_testing',
-    # 'django.contrib.admin',
-    # 'django.contrib.auth',
-    #'django.contrib.contenttypes',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     # 'django.contrib.sessions',
     # 'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'cts_app.filters',  # cts filters for pchem table
     'splash_app',
     'ubertool_app',
+    'hwbi_app',
 )
 
 # This breaks the pattern of a "pluggable" TEST_CTS django app, but it also makes it convenient to describe the server hosting the TEST API.
