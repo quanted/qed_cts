@@ -122,8 +122,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     # 'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cts_app',
-    'cts_app.filters',
+    # 'cts_app',
+    # 'cts_app.filters',
     'ubertool_app',
     'splash_app',
 )

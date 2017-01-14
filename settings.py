@@ -38,7 +38,7 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://134.67.114.2',
     'CTS_EFS_SERVER': 'http://134.67.114.2',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    'CTS_VERSION': '1.5.0'
+    'CTS_VERSION': '1.8'
 
 })
 
@@ -110,8 +110,8 @@ INSTALLED_APPS = (
     #'mod_wsgi.server',  # Only needed for mod_wsgi express (Python driver for Apache) e.g. on the production server
     # 'docs',
     # 'rest_framework_swagger',
-    'cts_app',  # cts django app
-    'cts_app.filters',  # cts filters for pchem table
+    # 'cts_app',  # cts django app
+    # 'cts_app.filters',  # cts filters for pchem table
     'splash_app',
     'ubertool_app',
 )
