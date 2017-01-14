@@ -60,20 +60,17 @@
   worker_epi:
     build: ./cts_app/cts_celery
     image: cts-celery:latest
-    # image: cts-celery:epi
     command: celery worker -A tasks -Q epi -l info -n epi_worker -c 1
     links:
     - redis
     environment:
     - REDIS_HOSTNAME=redis
-    # extra_hosts:
-    #   - "localhost:10.0.2.2"
+
 
   # # Celery worker - TEST calc
   worker_test:
     build: ./cts_app/cts_celery
     image: cts-celery:latest
-    # image: cts-celery:test
     command: celery worker -A tasks -Q test -l info -n test_worker -c 1
     links:
     - redis
@@ -84,7 +81,6 @@
   worker_sparc:
     build: ./cts_app/cts_celery
     image: cts-celery:latest
-    # image: cts-celery:sparc
     command: celery worker -A tasks -Q sparc -l info -n sparc_worker -c 1
     links:
     - redis
@@ -95,7 +91,6 @@
   worker_measured:
     build: ./cts_app/cts_celery
     image: cts-celery:latest
-    # image: cts-celery:measured
     command: celery worker -A tasks -Q measured -l info -n measured_worker -c 1
     links:
     - redis
