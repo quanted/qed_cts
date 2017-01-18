@@ -124,8 +124,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'cts_app',
     'cts_app.filters',
+    'cts_app.cts_testing',
     'ubertool_app',
     'splash_app',
+    'hwbi_app',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -218,7 +220,8 @@ DOCS_ROOT = os.path.join(PROJECT_ROOT, 'docs', '_build', 'html')
 DOCS_ACCESS = 'public'
 
 try:
-    import settings_local
+    # import settings_local
+    from settings_local import *
     print("Importing additional local settings")
 except ImportError:
     print("No local settings")
