@@ -41,6 +41,10 @@ os.environ.update({
     'CTS_VERSION': '1.8'
 })
 
+# cts_api addition:
+NODEJS_HOST = 'nginx'
+NODEJS_PORT = 80
+
 if not os.environ.get('UBERTOOL_REST_SERVER'):
     os.environ.update({'UBERTOOL_REST_SERVER': 'http://localhost:7777'})  # Local REST server
     print("REST backend = http://localhost:7777")
@@ -112,6 +116,7 @@ INSTALLED_APPS = (
     # 'rest_framework_swagger',
     'cts_app',  # cts django app
     'cts_app.filters',  # cts filters for pchem table
+    'cts_app.cts_testing',
     'splash_app',
     'ubertool_app',
     'hwbi_app',
@@ -213,7 +218,8 @@ if DEBUG:
     )
 
 try:
-    import settings_local
+    # import settings_local
+    from settings_local import *
     print("Importing additional local settings")
 except ImportError:
     print("No local settings")

@@ -106,8 +106,12 @@
 
   qed_nginx:
     restart: always
-    build: ./cts_app/cts_nginx
+    # build: ./cts_app/cts_nginx
     # build: ./qed_nginx
+    build:
+      context: ./cts_app/cts_nginx
+      args:
+        - configfilename=nginx.conf
     ports:
       - "80:80"
       - "443:443"

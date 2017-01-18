@@ -100,3 +100,6 @@ secret_key_django_dropbox.txt
 
 # pycharm stuff
 .idea
+
+# docker stuff
+docker-compose-local.yml
