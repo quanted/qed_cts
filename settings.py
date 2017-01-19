@@ -38,9 +38,12 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://134.67.114.2',
     'CTS_EFS_SERVER': 'http://134.67.114.2',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    'CTS_VERSION': '1.5.0'
-
+    'CTS_VERSION': '1.8'
 })
+
+# cts_api addition:
+NODEJS_HOST = 'nginx'
+NODEJS_PORT = 80
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
     os.environ.update({'UBERTOOL_REST_SERVER': 'http://localhost:7777'})  # Local REST server
@@ -83,6 +86,7 @@ TEMPLATES = [
                  os.path.join(TEMPLATE_ROOT, 'drupal_2014'),
                  os.path.join(TEMPLATE_ROOT, 'uber2017'),
                  os.path.join(TEMPLATE_ROOT, 'uber2011'),
+                 os.path.join(TEMPLATE_ROOT, 'hwbi'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -101,9 +105,9 @@ TEMPLATES = [
 INSTALLED_APPS = (
     #'cts_api',
     #'cts_testing',
-    # 'django.contrib.admin',
-    # 'django.contrib.auth',
-    #'django.contrib.contenttypes',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     # 'django.contrib.sessions',
     # 'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -112,8 +116,10 @@ INSTALLED_APPS = (
     # 'rest_framework_swagger',
     'cts_app',  # cts django app
     'cts_app.filters',  # cts filters for pchem table
+    'cts_app.cts_testing',
     'splash_app',
     'ubertool_app',
+    'hwbi_app',
 )
 
 # This breaks the pattern of a "pluggable" TEST_CTS django app, but it also makes it convenient to describe the server hosting the TEST API.
@@ -212,7 +218,8 @@ if DEBUG:
     )
 
 try:
-    import settings_local
+    # import settings_local
+    from settings_local import *
     print("Importing additional local settings")
 except ImportError:
     print("No local settings")

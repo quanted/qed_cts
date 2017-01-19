@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import socket
 
-
 # Get machine IP address
 MACHINE_ID = socket.gethostname()
 
@@ -29,6 +28,8 @@ os.environ.update({
     'PROJECT_PATH': PROJECT_ROOT,
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
+    #'IP_ADDRESS': IP_ADDRESS,
+    #'SECRET_KEY': SECRET_KEY,
 
     # cts_api addition:
     'CTS_EPI_SERVER': 'http://172.20.100.18',
@@ -53,12 +54,27 @@ if not os.environ.get('UBERTOOL_REST_SERVER'):
     
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
+#    SECRET_KEY= os.environ.get('DOCKER_SECRET_KEY')
     with open('secret_key_django_dropbox.txt') as f:
         SECRET_KEY = f.read().strip()
-except IOError as e:
-    print "Could not find secret file"
+except:
+    print "Secret file not set as env variable"
     SECRET_KEY = 'Shhhhhhhhhhhhhhh'
-    pass
+
+try:
+    HOSTNAME= os.environ.get('DOCKER_HOSTNAME')
+#    with open('secret_key_django_dropbox.txt') as f:
+#        SECRET_KEY = f.read().strip()
+except:
+    print "HOSTNAME address not set as env variable"
+    HOSTNAME = 'unknown'
+
+#try:
+#    with open('my_ip_address.txt') as f:
+#	IP_ADDRESS = f.read().strip()
+#except IOError as e:
+#    print "No IP address given"
+#    IP_ADDRESS = '0.0.0.0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -66,21 +82,25 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
-if MACHINE_ID == "ord-uber-vm001":
+if HOSTNAME == "ord-uber-vm001":
     ALLOWED_HOSTS.append('134.67.114.1')
     ALLOWED_HOSTS.append('qedinternal.epa.gov')
-elif MACHINE_ID == "ord-uber-vm003":
+    IS_PUBLIC = False
+elif HOSTNAME == "ord-uber-vm003":
     ALLOWED_HOSTS.append('134.67.114.3')
     ALLOWED_HOSTS.append('qed.epa.gov')
+    IS_PUBLIC = True
 else:
     ALLOWED_HOSTS.append('192.168.99.100')  # Docker Machine IP (generally, when using VirtualBox VM)
-    ALLOWED_HOSTS.append('134.67.114.3')    # CGI NAT address (mapped to 'qed.epa.gov')
+    #ALLOWED_HOSTS.append('134.67.114.3')    # CGI NAT address (mapped to 'qed.epa.gov')
     ALLOWED_HOSTS.append('134.67.114.1')
     ALLOWED_HOSTS.append('qedinternal.epa.gov')
-    ALLOWED_HOSTS.append('qed.epa.gov')
+    #ALLOWED_HOSTS.append('qed.epa.gov')
+    IS_PUBLIC = False
 
 print("MACHINE_ID = {}").format(MACHINE_ID)
-
+print("HOSTNAME = {}").format(HOSTNAME)
+print("IS_PUBLIC = {}").format(IS_PUBLIC)
 
 # Disable this because Django wants to email errors and there is no email server set up
 # ADMINS = (
@@ -124,8 +144,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'cts_app',
     'cts_app.filters',
+    'cts_app.cts_testing',
     'ubertool_app',
     'splash_app',
+    'hwbi_app',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -218,7 +240,8 @@ DOCS_ROOT = os.path.join(PROJECT_ROOT, 'docs', '_build', 'html')
 DOCS_ACCESS = 'public'
 
 try:
-    import settings_local
+    # import settings_local
+    from settings_local import *
     print("Importing additional local settings")
 except ImportError:
     print("No local settings")
