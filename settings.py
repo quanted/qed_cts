@@ -69,6 +69,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+IS_PUBLIC = False
+
 ADMINS = (
     ('Tom Purucker', 'purucker.tom@epa.gov'),
     ('Kurt Wolfe', 'wolfe.kurt@epa.gov'),
