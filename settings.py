@@ -27,6 +27,8 @@ NODEJS_HOST = 'nginx'
 NODEJS_PORT = 80
 # todo: look into ws w/ django 1.10
 
+IS_PUBLIC = False
+
 ADMINS = (
     ('Tom Purucker', 'purucker.tom@epa.gov'),
     ('Kurt Wolfe', 'wolfe.kurt@epa.gov'),
