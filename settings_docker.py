@@ -8,28 +8,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-import os
-import socket
+from settings import *
+
+print('settings_docker.py')
 
 # Get machine IP address
 MACHINE_ID = socket.gethostname()
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-TEMPLATE_ROOT = os.path.join(PROJECT_ROOT, 'templates_qed/')
-
 # Define ENVIRONMENTAL VARIABLES for project (replaces the app.yaml)
 os.environ.update({
-    'UBERTOOL_BATCH_SERVER': 'http://uberrest-topknotmeadows.rhcloud.com/',
-    'UBERTOOL_MONGO_SERVER': 'http://uberrest-topknotmeadows.rhcloud.com',
-    'UBERTOOL_SECURE_SERVER': 'http://uberrest-topknotmeadows.rhcloud.com',
     'REST_SERVER_8': 'http://172.20.100.18',
     'PROJECT_PATH': PROJECT_ROOT,
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
-    #'IP_ADDRESS': IP_ADDRESS,
-    #'SECRET_KEY': SECRET_KEY,
 
     # cts_api addition:
     'CTS_EPI_SERVER': 'http://172.20.100.18',
@@ -40,10 +31,12 @@ os.environ.update({
     'CTS_VERSION': '1.8'
 })
 
-# cts_api addition:
-NODEJS_HOST = 'nginx'
-NODEJS_PORT = 80
-# todo: look into ws w/ django 1.10
+# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = False
+
+
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
     os.environ.update({'UBERTOOL_REST_SERVER': 'http://qed_nginx:7777'})  # Docker network
@@ -59,7 +52,7 @@ try:
         SECRET_KEY = f.read().strip()
 except:
     print "Secret file not set as env variable"
-    SECRET_KEY = 'Shhhhhhhhhhhhhhh'
+    #SECRET_KEY = 'Shhhhhhhhhhhhhhh'
 
 try:
     HOSTNAME= os.environ.get('DOCKER_HOSTNAME')
@@ -107,48 +100,6 @@ print("IS_PUBLIC = {}").format(IS_PUBLIC)
 #     ('Ubertool Dev Team', 'ubertool-dev@googlegroups.com')
 # )
 
-APPEND_SLASH = True
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(TEMPLATE_ROOT, 'splash'),
-                 os.path.join(TEMPLATE_ROOT, 'drupal_2017'),
-                 os.path.join(TEMPLATE_ROOT, 'cts'),
-                 os.path.join(TEMPLATE_ROOT, 'drupal_2014'),
-                 os.path.join(TEMPLATE_ROOT, 'uber2017'),
-                 os.path.join(TEMPLATE_ROOT, 'uber2011'),
-                 os.path.join(TEMPLATE_ROOT, 'hwbi'),
-                 ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-
-            ],
-        },
-    },
-]
-
-# Application definition
-
-INSTALLED_APPS = (
-    # 'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    # 'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'cts_app',
-    'cts_app.filters',
-    'cts_app.cts_testing',
-    'ubertool_app',
-    'splash_app',
-    'hwbi_app',
-)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -167,34 +118,12 @@ WSGI_APPLICATION = 'wsgi_docker.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
-    }
-}
-
 # Authentication
 AUTH = True
 LOGIN_URL = '/ubertool/login'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# Setups databse-less test runner (Only needed for running test)
-TEST_RUNNER = 'testing.DatabaselessTestRunner'
 
-# CACHE Setup - required to run Django "sessions" without a database
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-#         'LOCATION': 'unique-snowflake'
-#     }
-# }
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -209,35 +138,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static_qed'),
-)
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = '/src/collected_static/'
-
-STATIC_URL = '/static_qed/'
 STATIC_ROOT = '/src/collected_static/'
 
-
-# print 'BASE_DIR = %s' %BASE_DIR
-# print 'PROJECT_ROOT = %s' %PROJECT_ROOT
-
-# Path to Sphinx HTML Docs
-# http://django-docs.readthedocs.org/en/latest/
-
-DOCS_ROOT = os.path.join(PROJECT_ROOT, 'docs', '_build', 'html')
-
-DOCS_ACCESS = 'public'
+# Log to console in Debug mode
+if DEBUG:
+    import logging
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(asctime)s %(levelname)s %(message)s',
+    )
 
 try:
     # import settings_local
