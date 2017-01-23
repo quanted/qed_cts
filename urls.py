@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 
 #regular expressions
@@ -7,9 +8,14 @@ from django.conf.urls import include, url
 
 print('qed.urls')
 #appends to the list of url patterns to check against
-urlpatterns = [
-	url(r'^', include('splash_app.urls')),
-    url(r'^hwbi/', include('hwbi_app.urls')),
-    url(r'^ubertool/', include('ubertool_app.urls')),
-    url(r'^cts/', include('cts_app.urls')),
-]
+if settings.IS_PUBLIC:
+    urlpatterns = [
+        url(r'^$', include('splash_app.urls'),name='home'),
+    ]
+else:
+    urlpatterns = [
+        url(r'^', include('splash_app.urls')),
+        url(r'^hwbi/', include('hwbi_app.urls')),
+        url(r'^ubertool/', include('ubertool_app.urls')),
+        url(r'^cts/', include('cts_app.urls')),
+    ]
