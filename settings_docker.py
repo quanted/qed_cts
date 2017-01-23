@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 from settings import *
+import os
+import socket
+import sys
 
 print('settings_docker.py')
 
