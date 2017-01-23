@@ -20,9 +20,17 @@ else:
         url(r'^cts/', include('cts_app.urls')),
     ]
 
-# 404 Error view (file not found)
-handler404 = 'splash_app.views.file_not_found'
-# 500 Error view (server error)
-handler500 = 'splash_app.views.file_not_found'
-# 403 Error view (forbidden)
-handler403 = 'splash_app.views.file_not_found'
+if settings.IS_PUBLIC:
+    # 404 Error view (file not found)
+    handler404 = 'splash_app.views.file_not_found'
+    # 500 Error view (server error)
+    handler500 = 'splash_app.views.file_not_found'
+    # 403 Error view (forbidden)
+    handler403 = 'splash_app.views.file_not_found'
+else: # the same for now
+    # 404 Error view (file not found)
+    handler404 = 'splash_app.views.file_not_found'
+    # 500 Error view (server error)
+    handler500 = 'splash_app.views.file_not_found'
+    # 403 Error view (forbidden)
+    handler403 = 'splash_app.views.file_not_found'
