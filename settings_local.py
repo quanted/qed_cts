@@ -1,5 +1,8 @@
 """
-Django settings for UberDjango project.
+Django settings for QED project when developing.
+
+NOTE: Make sure PyCharm django config is pointing to settings_local.py
+instead of settings.py
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -32,7 +35,7 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://134.67.114.2',
     'CTS_EFS_SERVER': 'http://134.67.114.2',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    'CTS_VERSION': '1.8'
+    # 'CTS_VERSION': '1.8'  # now set at settings.py
 })
 
 # SECURITY WARNING: don't run with debug turned on in production!

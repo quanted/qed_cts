@@ -1,5 +1,5 @@
 """
-Django settings for UberDjango project.
+Django settings for QED project when running with Docker.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -31,7 +31,7 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://172.20.100.12',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
     'CTS_TEST_SERVER': 'http://172.20.100.16:8080',
-    'CTS_VERSION': '1.8'
+    # 'CTS_VERSION': '1.8'  # Now set at settings.py
 })
 
 # SECURITY WARNING: don't run with debug turned on in production!
