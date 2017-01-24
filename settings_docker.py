@@ -36,7 +36,7 @@ os.environ.update({
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = False
 
 
