@@ -38,7 +38,6 @@
       - NODEJS_HOST=cts_nodejs
       - NODEJS_PORT=4000
       - REDIS_HOSTNAME=redis
-      - REDIS_HOST=redis
       - REDIS_PORT=6379
     links:
       - redis
