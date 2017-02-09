@@ -31,12 +31,13 @@ os.environ.update({
     'CTS_JCHEM_SERVER': 'http://172.20.100.12',
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
     'CTS_TEST_SERVER': 'http://172.20.100.16:8080',
+    'CTS_REST_SERVER': 'http://172.20.100.11', #using qedinternal as proxy for rest server
     # 'CTS_VERSION': '1.8'  # Now set at settings.py
 })
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 
 
@@ -80,18 +81,22 @@ TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = []
 if HOSTNAME == "ord-uber-vm001":
     ALLOWED_HOSTS.append('134.67.114.1')
+    ALLOWED_HOSTS.append('172.20.100.11')
     ALLOWED_HOSTS.append('qedinternal.epa.gov')
     IS_PUBLIC = False
 elif HOSTNAME == "ord-uber-vm003":
     ALLOWED_HOSTS.append('134.67.114.3')
+    ALLOWED_HOSTS.append('172.20.100.13')
     ALLOWED_HOSTS.append('qed.epa.gov')
     IS_PUBLIC = True
 else:
     ALLOWED_HOSTS.append('192.168.99.100')  # Docker Machine IP (generally, when using VirtualBox VM)
-    #ALLOWED_HOSTS.append('134.67.114.3')    # CGI NAT address (mapped to 'qed.epa.gov')
+    ALLOWED_HOSTS.append('134.67.114.3')    # CGI NAT address (mapped to 'qed.epa.gov')
     ALLOWED_HOSTS.append('134.67.114.1')
+    ALLOWED_HOSTS.append('172.20.100.11')
+    ALLOWED_HOSTS.append('172.20.100.13')    
     ALLOWED_HOSTS.append('qedinternal.epa.gov')
-    #ALLOWED_HOSTS.append('qed.epa.gov')
+    ALLOWED_HOSTS.append('qed.epa.gov')
     IS_PUBLIC = False
 
 print("MACHINE_ID = {}").format(MACHINE_ID)
