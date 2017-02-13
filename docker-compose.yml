@@ -8,18 +8,22 @@
     build: .
     image: qed-uwsgi-django:latest
     expose:
-    - "8080"
+      - "8080"
     volumes:
-    - collected_static:/src/collected_static
-    - .:/src  # map qed/ to container's /src for updating w/out rebuilding images
+      - collected_static:/src/collected_static
+      - .:/src  # map qed/ to container's /src for updating w/out rebuilding images
+    # command: . config/set_env_vars.sh ${QED_CONFIG}  # negates running env var script before docker-compose up
     environment:
-    - REDIS_HOSTNAME=redis
-    #these echo in the environmental variable to the running docker container
-    #so that is can be picked up by the django settings 
-    - DOCKER_HOSTNAME=${HOSTNAME}
-    #- DOCKER_SECRET_KEY=${SECRET_KEY}
+      - REDIS_HOSTNAME=redis
+      #these echo in the environmental variable to the running docker container
+      #so that is can be picked up by the django settings 
+      - DOCKER_HOSTNAME=${HOSTNAME}
+      #- DOCKER_SECRET_KEY=${SECRET_KEY}
+      # - CTS_JCHEM_SERVER=${CTS_JCHEM_SERVER}
     links:
-    - redis
+      - redis
+    # env_file:
+    #   - ./${QED_CONFIG} # path to config/.env file, container env vars, set with ./config/ bash or batch
 
   # Redis (message broker)
   redis:
@@ -54,9 +58,12 @@
     command: celery worker -A tasks -Q chemaxon -l info -n chemaxon_worker -c 2
     # command: bash -c "sleep 3 && celery -A tasks worker -Q chemaxon --loglevel=info --concurrency=1 -n chemaxon_worker"
     links:
-    - redis
+      - redis
+      - qed_django
     environment:
-    - REDIS_HOSTNAME=redis
+      - REDIS_HOSTNAME=redis
+    # env_file:
+    #   - ./${QED_CONFIG}
 
 
   # # Celery worker - EPI Suite calc
@@ -65,9 +72,11 @@
     image: cts-celery:latest
     command: celery worker -A tasks -Q epi -l info -n epi_worker -c 1
     links:
-    - redis
+      - redis
     environment:
-    - REDIS_HOSTNAME=redis
+      - REDIS_HOSTNAME=redis
+    # env_file:
+    #   - ./${QED_CONFIG}
 
 
   # # Celery worker - TEST calc
@@ -76,9 +85,11 @@
     image: cts-celery:latest
     command: celery worker -A tasks -Q test -l info -n test_worker -c 1
     links:
-    - redis
+      - redis
     environment:
-    - REDIS_HOSTNAME=redis
+      - REDIS_HOSTNAME=redis
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - SPARC calc
   worker_sparc:
@@ -86,9 +97,11 @@
     image: cts-celery:latest
     command: celery worker -A tasks -Q sparc -l info -n sparc_worker -c 1
     links:
-    - redis
+      - redis
     environment:
-    - REDIS_HOSTNAME=redis
+      - REDIS_HOSTNAME=redis
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - Measured (EPI) calc
   worker_measured:
@@ -96,13 +109,15 @@
     image: cts-celery:latest
     command: celery worker -A tasks -Q measured -l info -n measured_worker -c 1
     links:
-    - redis
+      - redis
     environment:
-    - REDIS_HOSTNAME=redis
+      - REDIS_HOSTNAME=redis
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   qed_nginx:
     restart: always
-    #build: ./cts_app/cts_nginx
+    # build: ../cts_nginx
     build: ./qed_nginx
     ports:
       - "80:80"
@@ -121,4 +136,4 @@
   ecorest:
     build: ./ubertool_ecorest
     expose:
-    - "7777"
+      - "7777"

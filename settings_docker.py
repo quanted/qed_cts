@@ -12,11 +12,16 @@ from settings import *
 import os
 import socket
 import sys
+import logging
+
 
 print('settings_docker.py')
 
 # Get machine IP address
 MACHINE_ID = socket.gethostname()
+
+for key, val in os.environ.items():
+    logging.info("QED DJANGO ENV VAR: {}: {}".format(key, val))
 
 # Define ENVIRONMENTAL VARIABLES for project (replaces the app.yaml)
 os.environ.update({
@@ -25,7 +30,7 @@ os.environ.update({
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
 
-    # cts_api addition:
+    # # cts_api addition:
     'CTS_EPI_SERVER': 'http://172.20.100.18',
     'CTS_EFS_SERVER': 'http://172.20.100.12',
     'CTS_JCHEM_SERVER': 'http://172.20.100.12',
