@@ -30,14 +30,14 @@ os.environ.update({
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
 
-    # # # cts_api addition:
-    # 'CTS_EPI_SERVER': 'http://172.20.100.18',
-    # 'CTS_EFS_SERVER': 'http://172.20.100.12',
-    # 'CTS_JCHEM_SERVER': 'http://172.20.100.12',
-    # 'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    # 'CTS_TEST_SERVER': 'http://172.20.100.16:8080',
-    # 'CTS_REST_SERVER': 'http://172.20.100.11', #using qedinternal as proxy for rest server
-    # # 'CTS_VERSION': '1.8'  # Now set at settings.py
+    # # cts_api addition:
+    'CTS_EPI_SERVER': 'http://172.20.100.18',
+    'CTS_EFS_SERVER': 'http://172.20.100.12',
+    'CTS_JCHEM_SERVER': 'http://172.20.100.12',
+    'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
+    'CTS_TEST_SERVER': 'http://172.20.100.16:8080',
+    'CTS_REST_SERVER': 'http://172.20.100.11', #using qedinternal as proxy for rest server
+    # 'CTS_VERSION': '1.8'  # Now set at settings.py
 })
 
 # SECURITY WARNING: don't run with debug turned on in production!
