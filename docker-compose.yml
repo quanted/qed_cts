@@ -19,9 +19,9 @@
       #so that is can be picked up by the django settings 
       - DOCKER_HOSTNAME=${HOSTNAME}
       #- DOCKER_SECRET_KEY=${SECRET_KEY}
-      # - CTS_JCHEM_SERVER=${CTS_JCHEM_SERVER}
     links:
       - redis
+    # command: [sh, ./config/set_env_vars.sh, '']  # still have to point to env file somehow
     # env_file:
     #   - ./${QED_CONFIG} # path to config/.env file, container env vars, set with ./config/ bash or batch
 
