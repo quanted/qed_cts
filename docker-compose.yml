@@ -22,8 +22,8 @@
     links:
       - redis
     # command: [sh, ./config/set_env_vars.sh, '']  # still have to point to env file somehow
-    # env_file:
-    #   - ./${QED_CONFIG} # path to config/.env file, container env vars, set with ./config/ bash or batch
+    env_file:
+      - ./${QED_CONFIG} # path to config/.env file, container env vars, set with ./config/ bash or batch
 
   # Redis (message broker)
   redis:
@@ -62,8 +62,8 @@
       - qed_django
     environment:
       - REDIS_HOSTNAME=redis
-    # env_file:
-    #   - ./${QED_CONFIG}
+    env_file:
+      - ./${QED_CONFIG}
 
 
   # # Celery worker - EPI Suite calc
@@ -75,8 +75,8 @@
       - redis
     environment:
       - REDIS_HOSTNAME=redis
-    # env_file:
-    #   - ./${QED_CONFIG}
+    env_file:
+      - ./${QED_CONFIG}
 
 
   # # Celery worker - TEST calc
@@ -88,8 +88,8 @@
       - redis
     environment:
       - REDIS_HOSTNAME=redis
-    # env_file:
-    #   - ./${QED_CONFIG}
+    env_file:
+      - ./${QED_CONFIG}
 
   # # Celery worker - SPARC calc
   worker_sparc:
@@ -100,8 +100,8 @@
       - redis
     environment:
       - REDIS_HOSTNAME=redis
-    # env_file:
-    #   - ./${QED_CONFIG}
+    env_file:
+      - ./${QED_CONFIG}
 
   # # Celery worker - Measured (EPI) calc
   worker_measured:
@@ -112,8 +112,8 @@
       - redis
     environment:
       - REDIS_HOSTNAME=redis
-    # env_file:
-    #   - ./${QED_CONFIG}
+    env_file:
+      - ./${QED_CONFIG}
 
   qed_nginx:
     restart: always
@@ -127,7 +127,8 @@
       - cts_nodejs:cts_nodejs
       - ecorest:uwsgi_flask
     volumes:
-      - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
+      # - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
+      - c:/Users/nickpope/Documents/secrets/certs/:/etc/nginx/qed
     volumes_from:
       - qed_django:ro  # Mount all volumes from "qed_django" to NGINX, so it can access the collected static files
 
