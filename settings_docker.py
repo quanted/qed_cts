@@ -32,6 +32,7 @@ os.environ.update({
     'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
     'CTS_TEST_SERVER': 'http://172.20.100.16:8080',
     'CTS_REST_SERVER': 'http://172.20.100.11', #using qedinternal as proxy for rest server
+    'HWBI_REST_SERVER': 'http://172.20.100.11', #using qedinternal as proxy for rest server
     # 'CTS_VERSION': '1.8'  # Now set at settings.py
 })
 
