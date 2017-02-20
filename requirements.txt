@@ -23,6 +23,7 @@ pandas
 pillow
 pypdf2
 python-coveralls
+python-dotenv
 selenium
 six
 Sphinx
