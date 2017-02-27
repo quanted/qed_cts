@@ -29,7 +29,6 @@ os.environ.update({
     'PROJECT_PATH': PROJECT_ROOT,
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
-
     # # # cts_api addition:
     # 'CTS_EPI_SERVER': 'http://172.20.100.18',
     # 'CTS_EFS_SERVER': 'http://172.20.100.12',
@@ -44,8 +43,6 @@ os.environ.update({
 # DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = False
-
-
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
     os.environ.update({'UBERTOOL_REST_SERVER': 'http://qed_nginx:7777'})  # Docker network
