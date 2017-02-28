@@ -62,8 +62,6 @@ TEMPLATES = [
 
 # Application definition
 INSTALLED_APPS = (
-    #'cts_api',
-    #'cts_testing',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,15 +75,7 @@ INSTALLED_APPS = (
     'cts_app.filters',  # cts filters for pchem table
     'cts_app.cts_api',
     'cts_app.cts_testing',
-    #'cyan_app',  # cyan django app
-    #'hem_app',  # hem django app
-    #'hms_app',  # hms django app
-    'hwbi_app',  # hwbi django app
-    #'pisces_app',  # pisces django app
-    #'pop_app',  # pop django app
-    #'sam_app',  # sam django app
     'splash_app',  # splash django app
-    'ubertool_app',  # ubertool django app
 )
 
 # This breaks the pattern of a "pluggable" TEST_CTS django app, but it also makes it convenient to describe the server hosting the TEST API.
