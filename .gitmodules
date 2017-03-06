@@ -28,3 +28,6 @@
 [submodule "cts_channels"]
 	path = cts_channels
 	url = https://github.com/quanted/cts_channels.git
+[submodule "cts_api"]
+	path = cts_api
+	url = https://github.com/popenc/cts_api.git
