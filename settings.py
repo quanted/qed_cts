@@ -71,11 +71,12 @@ INSTALLED_APPS = (
     #'mod_wsgi.server',  # Only needed for mod_wsgi express (Python driver for Apache) e.g. on the production server
     # 'docs',
     # 'rest_framework_swagger',
+    'cts_api',
     'cts_app',  # cts django app
     'cts_app.filters',  # cts filters for pchem table
-    'cts_app.cts_api',
     'cts_app.cts_testing',
     'splash_app',  # splash django app
+    'channels',
 )
 
 # This breaks the pattern of a "pluggable" TEST_CTS django app, but it also makes it convenient to describe the server hosting the TEST API.
@@ -91,6 +92,22 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'urls'
+
+# Django Channels Layers
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "cts_channels.routing.channel_routing",
+    },
+}
+
+if os.environ.get('REDIS_HOSTNAME'):
+    CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(
+        os.environ.get('REDIS_HOSTNAME'), os.environ.get('REDIS_PORT')
+    )]
 
 
 
