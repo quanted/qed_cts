@@ -105,6 +105,7 @@ CHANNEL_LAYERS = {
 }
 
 if os.environ.get('REDIS_HOSTNAME'):
+    logging.info("Found REDIS_HOSTNAME env var: {}".format(os.environ.get('REDIS_HOSTNAME')))
     CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(
         os.environ.get('REDIS_HOSTNAME'), os.environ.get('REDIS_PORT')
     )]
