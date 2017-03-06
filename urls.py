@@ -16,6 +16,7 @@ else:
     urlpatterns = [
         url(r'^', include('splash_app.urls')),
         url(r'^cts/', include('cts_app.urls')),
+        url(r'^rest/cts/', include('cts_api.urls')),
     ]
 
 if settings.IS_PUBLIC:

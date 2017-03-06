@@ -47,17 +47,15 @@ def ws_pchem_request(message):
 	})
 
 
-# @app.task
-# def chemaxon_channel(request_post):
-#     request = NotDjangoRequest()
-#     request.POST = request_post
-#     logging.info("Request: {}".format(request_post))
-#     return chemaxon_worker.request_manager(request)
 def chemaxon_channel(message):
     logging.info("incoming message to chemaxon channel: {}".format(message))
     post_request = message.content  # expecting json request for chemaxon pchem data
     # return chemaxon_worker.request_manager(request)
-    pchem_response = chemaxon_cts.worker.request_manager({'this': 'is', 'not': 'real'})
+
+    # this is where the call would go to cts_api rest endpoint
+    
+
+    # pchem_response = chemaxon_cts.worker.request_manager({'this': 'is', 'not': 'real'})
     message.reply_channel.send({'text': 'chemaxon worker made p-chem request'})
 
 
