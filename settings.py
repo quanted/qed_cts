@@ -103,7 +103,8 @@ if os.environ.get('REDIS_HOSTNAME'):
     REDIS_HOSTNAME = os.environ.get('REDIS_HOSTNAME')
     REDIS_PORT = int(os.environ.get('REDIS_PORT'))
 
-print "REDIS_PORT type: {}".format(type(REDIS_PORT))
+print "Using REDIS_HOSTNAME: {}".format(REDIS_PORT)
+print "Using REDIS_PORT: {}".format(REDIS_HOSTNAME)
 
 # Django Channels Layers
 CHANNEL_LAYERS = {
