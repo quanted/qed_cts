@@ -1,24 +1,10 @@
 # In consumers.py
 import logging
-
 from channels import Group
-# from cts_channels.cts_calcs import chemaxon_cts  # works, but no content within chemaxon_cts...
-# from cts_calcs import chemaxon_cts  # import error doing it this way
-# from cts_app.cts_calcs import chemaxon_cts  # works, also not content in chemaxon_cts/
-# from qed_cts.cts_app.cts_calcs import chemaxon_cts
-# from qed_cts.cts_channels.cts_calcs import chemaxon_cts
-# from cts_channels import cts_calcs
-from cts_channels.cts_calcs import chemaxon_cts
-
-# logging.warning("CTS_CALCS: {}".format(dir(cts_calcs)))
-
+from channels.generic.websockets import JsonWebsocketConsumer
 import os
-
-
-logging.warning("JCHEM VAL: {}".format(os.environ.get('CTS_JCHEM_SERVER')))
-logging.warning("CHEMAXON_CTS CONTENTS: {}".format(dir(chemaxon_cts)))
-
-# chemaxon_worker = chemaxon_cts.worker
+import time
+import json
 
 
 def ws_message(message):
@@ -28,36 +14,110 @@ def ws_message(message):
         "text": message.content['text'],
     })
 
+
 # Connected to websocket.connect
 def ws_add(message):
     message.reply_channel.send({"accept": True})
     Group("chat").add(message.reply_channel)
 
+
 # Connected to websocket.disconnect
 def ws_disconnect(message):
     Group("chat").discard(message.reply_channel)
 
-def ws_pchem_request(message):
-	# assuming p-chem request from single user.
-	# parse out request to workers..
-	check_mess = message;
-	message.reply_channel.send({
-		# "text": message.content['text'],
-		"text": "hello, this is pchem channel",
-	})
+
+def worker_channels(message, service):
+    """
+    message type from django channels
+    service - calc name for p-chem data, metabolizer, speciation
+    """
+    logging.info("incoming message to channels channel: {}".format(message))
+    post_request = message.content  # expecting json request for channels pchem data
+    # return channels_worker.request_manager(request)
+
+    logging.warning("arg: {}".format(service))
+    logging.warning("message: {}".format(message.content))
+
+    
+    # ??? Can there be multple workers that consume this same function, but
+    # each worker only consumes certain requests based on "calc" arg ???
+
+    # Do the workers even need to be separated by calc? (probably not)
+    time.sleep(5)  # sleep 5s, checking for parllel worker consumption of same function/route
 
 
-def chemaxon_channel(message):
-    logging.info("incoming message to chemaxon channel: {}".format(message))
-    post_request = message.content  # expecting json request for chemaxon pchem data
-    # return chemaxon_worker.request_manager(request)
-
-    # this is where the call would go to cts_api rest endpoint
+    # p-chem request would go here
     
 
-    # pchem_response = chemaxon_cts.worker.request_manager({'this': 'is', 'not': 'real'})
-    message.reply_channel.send({'text': 'chemaxon worker made p-chem request'})
+
+    # pchem_response = channels_cts.worker.request_manager({'this': 'is', 'not': 'real'})
+    message.reply_channel.send({'text': 'channels worker made p-chem request to {}'.format(calc)})
+
+# def ws_pchem_request(message):
+# 	# assuming p-chem request from single user.
+# 	# parse out request to workers..
+# 	check_mess = message;
+# 	message.reply_channel.send({
+# 		# "text": message.content['text'],
+# 		"text": "hello, this is pchem channel",
+# 	})
 
 
-# Do I need a custom channel? A connected user establishes a new channel
-# automatically, which I'm assuming can all use the same channel functions...
+# def chemaxon_channel(message):
+#     logging.info("incoming message to chemaxon channel: {}".format(message))
+#     post_request = message.content  # expecting json request for chemaxon pchem data
+#     # return chemaxon_worker.request_manager(request)
+
+#     # this is where the call would go to cts_api rest endpoint
+
+
+#     # pchem_response = chemaxon_cts.worker.request_manager({'this': 'is', 'not': 'real'})
+#     message.reply_channel.send({'text': 'chemaxon worker made p-chem request'})
+
+
+# def sparc_channel(message):
+#     logging.info("incoming message to sparc channel: {}".format(message))
+#     post_request = message.content  # expecting json request for sparc pchem data
+#     # return sparc_worker.request_manager(request)
+
+#     # this is where the call would go to cts_api rest endpoint
+
+
+#     # pchem_response = sparc_cts.worker.request_manager({'this': 'is', 'not': 'real'})
+#     message.reply_channel.send({'text': 'sparc worker made p-chem request'})
+
+
+# # Generic Consumer: JSON-enabled WebSocket Class
+# class ChemaxonConsumer(JsonWebsocketConsumer):
+
+#     # set to True for ordering:
+#     strict_ordering = False
+
+#     method_mapping = {
+#         'channel_chemaxon': 'method name'
+#     }
+
+#     def connection_groups(self, **kwargs):
+#         """
+#         Called to return the list of groups to automatically add/remove
+#         this connection to/from.
+#         """
+#         return ["test"]
+
+#     def connect(self, **kwargs):
+#         """
+#         Perform things on connection start
+#         """
+#         pass
+
+#     def receive(self, content, **kwargs):
+#         """
+#         Called when a message is received with decoded JSON content
+#         """
+#         self.send(content)  # simple echo (self.send auto encodes JSON)
+
+#     def disconnect(self, message, **kwargs):
+#         """
+#         Perform things on connection close
+#         """
+#         pass

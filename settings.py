@@ -93,28 +93,32 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
+
+# Redis hostname and port
+REDIS_HOSTNAME = 'localhost'
+REDIS_PORT = 6379
+if os.environ.get('REDIS_HOSTNAME'):
+    print "Found REDIS_HOSTNAME env var: {}".format(os.environ.get('REDIS_HOSTNAME'))
+    print "Found REDIS_PORT env var: {}".format(os.environ.get('REDIS_PORT'))
+    REDIS_HOSTNAME = os.environ.get('REDIS_HOSTNAME')
+    REDIS_PORT = int(os.environ.get('REDIS_PORT'))
+
+print "REDIS_PORT type: {}".format(type(REDIS_PORT))
+
 # Django Channels Layers
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": [(REDIS_HOSTNAME, REDIS_PORT)]
         },
         "ROUTING": "cts_channels.routing.channel_routing",
     },
 }
 
-if os.environ.get('REDIS_HOSTNAME'):
-    logging.info("Found REDIS_HOSTNAME env var: {}".format(os.environ.get('REDIS_HOSTNAME')))
-    CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(
-        os.environ.get('REDIS_HOSTNAME'), os.environ.get('REDIS_PORT')
-    )]
-
-
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
