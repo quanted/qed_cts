@@ -13,21 +13,9 @@
 [submodule "qed_nginx"]
 	path = qed_nginx
 	url = https://github.com/puruckertom/qed_nginx.git
-[submodule "cts_nodejs"]
-	path = cts_nodejs
-	url = https://github.com/popenc/cts_nodejs.git
 [submodule "cts_celery"]
 	path = cts_celery
 	url = https://github.com/popenc/cts_celery.git
 [submodule "temp_config"]
 	path = temp_config
 	url = https://github.com/popenc/temp_config
-[submodule "cts_channels/cts_calcs"]
-	path = cts_channels/cts_calcs
-	url = https://github.com/popenc/cts_calcs.git
-[submodule "cts_channels"]
-	path = cts_channels
-	url = https://github.com/quanted/cts_channels.git
-[submodule "cts_api"]
-	path = cts_api
-	url = https://github.com/popenc/cts_api.git
