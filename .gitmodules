@@ -13,9 +13,6 @@
 [submodule "qed_nginx"]
 	path = qed_nginx
 	url = https://github.com/puruckertom/qed_nginx.git
-[submodule "cts_celery"]
-	path = cts_celery
-	url = https://github.com/popenc/cts_celery.git
 [submodule "temp_config"]
 	path = temp_config
 	url = https://github.com/popenc/temp_config
