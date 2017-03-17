@@ -9,10 +9,8 @@ import time
 import json
 
 from cts_app import cts_calcs
-from cts_app.cts_calcs import worker_chemaxon
+# from cts_app.cts_calcs import worker_chemaxon
 from cts_app.cts_calcs import calculator
-# from cts_app.cts_calcs import chemaxon_cts
-# from cts_app.cts_calcs.chemaxon_cts import worker
 
 logging.warning("CHEMAXON DIR: {}".format(dir(cts_calcs)))
 
@@ -86,7 +84,7 @@ def request_handler(sessionid, data_obj):
 
 def parse_request(sessionid, data_obj, message):
 
-    if data_obj['service'] == 'getSpeciationData' or data_obj['service'] == 'getTransProducts'
+    if data_obj['service'] == 'getSpeciationData' or data_obj['service'] == 'getTransProducts':
         data_obj['sessionid'] = sessionid
         # client.call('tasks.chemaxonTask', [data_obj])
         response_dict = calc_obj.request_logic(data_obj, message)
@@ -107,7 +105,7 @@ def parse_pchem_request(sessionid, data_obj, message):
         data_obj['props'] = props_list
         data_obj['sessionid'] = sessionid
 
-        calc_obj = calculator.Calculator(calc_name)  # get calc-specific class object
+        # calc_obj = calculator.Calculator(calc_name)  # get calc-specific class object
 
         response_dict = calc_obj.request_logic(data_obj, message)  # parsed request sent to calc server(s)
 
