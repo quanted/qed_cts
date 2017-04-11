@@ -1,0 +1,76 @@
+ version: '2'
+ volumes:
+  collected_static: {}
+ services:
+
+  # QED Django front-end
+  # qed_django:
+  # qed_django:
+  interface_server:
+    restart: always
+    build: .
+    image: asgi-django:latest
+    expose:
+      - "8080"
+    volumes:
+      - collected_static:/src/collected_static
+      - .:/src  # map qed/ to container's /src for updating w/out rebuilding images
+    # command: . config/set_env_vars.sh ${QED_CONFIG}  # negates running env var script before docker-compose up
+    environment:
+      - REDIS_HOSTNAME=redis
+      - DOCKER_HOSTNAME=${HOSTNAME}
+    command: sh /src/docker_start.sh
+    links:
+      - redis
+    
+  # Redis (message broker)
+  redis:
+    image: redis:latest
+    hostname: redis
+    expose:
+      - "6379"
+
+  # # Celery worker - ChemAxon calc
+  worker_chemaxon:
+    restart: always
+    build: .
+    image: asgi-django
+    command: python manage.py runworker --only-channels=chemaxon.receive
+    links:
+      - redis
+      # - qed_django
+    environment:
+      - REDIS_HOSTNAME=redis
+      - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
+
+  # # # Celery worker - EPI calc
+  # worker_epi:
+  #   restart: always
+  #   build: .
+  #   image: asgi-django
+  #   command: python manage.py runworker
+  #   links:
+  #     - redis
+  #   environment:
+  #     - REDIS_HOSTNAME=redis
+  #     - DOCKER_HOSTNAME=${HOSTNAME}
+  #   # env_file:
+  #   #   - ./${QED_CONFIG}
+
+  qed_nginx:
+    restart: always
+    build: ../cts_nginx
+    # build: ./qed_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - interface_server:asgi_django  # Nginx.conf can reference "qed_django" service with the hostname 'uwsgi' or 'qed_django'
+      # - cts_nodejs:cts_nodejs
+      # - ecorest:uwsgi_flask
+    volumes:
+      - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
+    volumes_from:
+      - interface_server:ro  # Mount all volumes from "qed_django" to NGINX, so it can access the collected static files

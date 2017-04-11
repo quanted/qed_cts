@@ -2,17 +2,25 @@
 
 # In consumers.py
 import logging
-from channels import Group
-from channels.generic.websockets import JsonWebsocketConsumer
+from channels import Group, Channel
+# from channels.sessions import channel_session
 import os
 import time
 import json
 
-from cts_app import cts_calcs
+# from cts_app import cts_calcs
 # from cts_app.cts_calcs import worker_chemaxon
-from cts_app.cts_calcs import calculator
+from cts_app.cts_calcs.calculator import Calculator
+from cts_app.cts_calcs.calculator_chemaxon import JchemCalc
+from cts_app.cts_calcs.calculator_epi import EpiCalc
+from cts_app.cts_calcs.calculator_measured import MeasuredCalc
+from cts_app.cts_calcs.calculator_test import TestCalc
+from cts_app.cts_calcs.calculator_sparc import SparcCalc
+from cts_app.cts_calcs.calculator_metabolizer import MetabolizerCalc
 
-logging.warning("CHEMAXON DIR: {}".format(dir(cts_calcs)))
+# import celery_tasks
+
+# logging.warning("CHEMAXON DIR: {}".format(dir(cts_calcs)))
 
 
 def ws_message(message):
@@ -34,81 +42,116 @@ def ws_disconnect(message):
     Group("chat").discard(message.reply_channel)
 
 
-def ws_request_consumer(message):
-    """
-    message type from django channels
-    service - calc name for p-chem data, metabolizer, speciation
-    """
 
-    logging.info("incoming message to channels channel: {}".format(message))
-    post_request = message.content  # expecting json request for channels pchem data
+# Unpacks the JSON in the received WebSocket frame and puts it onto a channel
+# of its own with a few attributes extra so we can route it
+# This doesn't need @channel_session_user as the next consumer will have that,
+# and we preserve message.reply_channel (which that's based on)
+def ws_receive(message):
+    # All WebSocket frames have either a text or binary payload; we decode the
+    # text part here assuming it's JSON.
+    # You could easily build up a basic framework that did this encoding/decoding
+    # for you as well as handling common errors.
+    try:
+        payload = json.loads(message.content['text'])
+    except Exception as e:
+        logging.warning("Exception serializing payload in consumers.py: {}".format(e))
+        raise  # TODO: a different escape plan
 
-    # logging.info("arg: {}".format(service))
-    logging.info("message: {}".format(message.content))
+    payload['reply_channel'] = message.content['reply_channel']
+    payload['sessionid'] = message.content['reply_channel'].split('!')[1]  # ID after "!" in reply ch.
+    payload['channel_name'] = message.reply_channel.name
 
-    # get sessionid:
-    sessionid = message.content['reply_channel'].split('!')[1]  # ID after "!" in reply ch.
-    logging.info("sessionid: {}".format(sessionid))
-
-    service_request = json.loads(message.content['text'])  # incoming json string
-
-    # request_handler(sessionid, service_request)
-    request_handler(sessionid, message)
-
-    # calc = service_request['calc']  # calc name, speciation, or transformation products
-
-    # calc_obj = calculator.Calculator(calc)  # if service recognized, get sub class instance
-    # response_dict = calc_obj.request_logic(service_request, message)
-
-    # message.reply_channel.send({'text': json.dumps(response_dict)})  # push to client
-
-
-def request_handler(sessionid, data_obj):
-
-    if 'cancel' in data_obj:
+    if 'cancel' in payload:
         # still need this remove user jobs from queue condition?
+        # TODO: Canceling jobs on worker servers in Django Channels
         logging.warning("cancel request received at consumers.py")
         return
 
-    user_jobs = []  # still track user job IDs?
+    if payload.get('calc') == 'chemaxon':
+        Channel("chemaxon.receive").send(payload)  # send chemaxon request to chemaxon channel
+    elif payload.get('calc') == 'sparc':
+        Channel('sparc.receive').send(payload)
+    elif payload.get('calc') == 'epi':
+        Channel('epi.receive').send(payload)
+    elif payload.get('calc') == 'test':
+        Channel('test.receive').send(payload)
+    elif payload.get('calc') == 'measured':
+        Channel('measured.receive').send(payload)
 
-    if 'nodes' in data_obj:
-        for node in data_obj['nodes']:
-            node_obj = data_obj['nodes'][node]
-            data_obj['node'] = node_obj
-            data_obj['chemical'] = node_obj['smiles']
-            job_id = parse_request(sessionid, data_obj, message)
-    else:
-        job_id = parse_request(sessionid, data_obj, message)
+# @channel_session
+def chemaxon_channel(payload):
+    _response_data = JchemCalc().data_request_handler(payload.content)
+    payload.reply_channel.send({'text': json.dumps(_response_data)})
+
+# @channel_session
+def sparc_channel(payload):
+    _response_data = SparcCalc().data_request_handler(payload.content)
+    payload.reply_channel.send({'text': json.dumps(_response_data)})
+
+def epi_channel(payload):
+    _response_data = EpiCalc().data_request_handler(payload.content)
+    payload.reply_channel.send({'text': json.dumps(_response_data)})
+
+def test_channel(payload):
+    _response_data = TestCalc().data_request_handler(payload.content)
+    payload.reply_channel.send({'text': json.dumps(_response_data)})
+
+def measured_channel(payload):
+    _response_data = MeasuredCalc().data_request_handler(payload.content)
+    payload.reply_channel.send({'text': json.dumps(_response_data)})
 
 
-def parse_request(sessionid, data_obj, message):
-
-    if data_obj['service'] == 'getSpeciationData' or data_obj['service'] == 'getTransProducts':
-        data_obj['sessionid'] = sessionid
-        # client.call('tasks.chemaxonTask', [data_obj])
-        response_dict = calc_obj.request_logic(data_obj, message)
-        return sessionid
-    else:
-        parse_pchem_request(sessionid, data_obj, client)
-        return sessionid
-
-
-def parse_pchem_request(sessionid, data_obj, message):
+def parse_request_by_calc(payload):
     """
-    python version of cts_nodejs's node_server.js
-    function: pchemRequestHandler
+    Parsing request up by calculator, sending it
+    to the calc's channel
+
+    Note: pay attention to how data comes back to client, previously
+    all props came back at once instead of one at a time despite
+    having a message.reply_channel for each prop...
     """
-    for calc_name, props_list in data_obj['pchem_request'].items():
 
-        data_obj['calc'] = calc_name
-        data_obj['props'] = props_list
-        data_obj['sessionid'] = sessionid
+    if payload.get('service') == 'getSpeciationData':
+        # Channel("chemaxon.receive").send(_payload)
+        celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
+        return
 
-        # calc_obj = calculator.Calculator(calc_name)  # get calc-specific class object
+    if payload.get('service') == 'getTransProducts':
+        # Channel("metabolizer.receive").send(_payload)
+        celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
+        return
 
-        response_dict = calc_obj.request_logic(data_obj, message)  # parsed request sent to calc server(s)
+    for calc_name, props_list in payload['pchem_request'].items():
 
-        # message.reply_channel.send({'text': json.dumps(response_dict)})  # push to client
+        payload['calc'] = calc_name
 
-    return sessionid
+        for prop in props_list:
+
+            logging.info("PROP {} for {} calc".format(prop, calc_name))
+            payload['prop'] = prop
+
+            is_chemaxon = calc_name == 'chemaxon'
+            is_kow = prop == 'kow_no_ph' or prop == 'kow_wph'
+
+            if is_chemaxon and is_kow:
+                for method in JchemCalc().methods:
+                    payload['method'] = method
+                    Channel("chemaxon.receive").send(payload)
+                    # celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
+            else:
+                if calc_name == 'chemaxon':
+                    Channel("chemaxon.receive").send(payload)  # send chemaxon request to chemaxon channel
+                    # celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
+                elif calc_name == 'sparc':
+                    # Channel('sparc.receive').send(payload)
+                    celery_tasks.sparcTask.apply_async(args=[payload], queue="sparc")
+                elif calc_name == 'epi':
+                    # Channel('epi.receive').send(payload)
+                    celery_tasks.epiTask.apply_async(args=[payload], queue="epi")
+                elif calc_name == 'test':
+                    # Channel('test.receive').send(payload)
+                    celery_tasks.testTask.apply_async(args=[payload], queue="test")
+                elif calc_name == 'measured':
+                    # Channel('measured.receive').send(payload)
+                    celery_tasks.measuredTask.apply_async(args=[payload], queue="measured")

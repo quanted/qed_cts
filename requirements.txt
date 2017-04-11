@@ -1,7 +1,9 @@
+asgi_redis
 Django
 redis
 requests
 celery
+channels
 django-parsley
 enum34
 flower

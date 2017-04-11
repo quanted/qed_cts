@@ -101,8 +101,10 @@ REDIS_HOSTNAME = 'localhost'
 REDIS_PORT = 6379
 if os.environ.get('REDIS_HOSTNAME'):
     print "Found REDIS_HOSTNAME env var: {}".format(os.environ.get('REDIS_HOSTNAME'))
-    print "Found REDIS_PORT env var: {}".format(os.environ.get('REDIS_PORT'))
     REDIS_HOSTNAME = os.environ.get('REDIS_HOSTNAME')
+
+if os.environ.get('REDIS_PORT'):
+    print "Found REDIS_PORT env var: {}".format(os.environ.get('REDIS_PORT'))
     REDIS_PORT = int(os.environ.get('REDIS_PORT'))
 
 print "Using REDIS_HOSTNAME: {}".format(REDIS_PORT)
@@ -116,7 +118,7 @@ CHANNEL_LAYERS = {
             "hosts": [(REDIS_HOSTNAME, REDIS_PORT)]
         },
         "ROUTING": "routing.channel_routing",
-    },
+    }
 }
 
 
