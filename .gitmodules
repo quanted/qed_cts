@@ -10,15 +10,6 @@
 [submodule "splash_app"]
 	path = splash_app
 	url = https://github.com/quanted/splash_app.git
-[submodule "qed_nginx"]
-	path = qed_nginx
-	url = https://github.com/puruckertom/qed_nginx.git
-[submodule "cts_nodejs"]
-	path = cts_nodejs
-	url = https://github.com/popenc/cts_nodejs.git
-[submodule "cts_celery"]
-	path = cts_celery
-	url = https://github.com/popenc/cts_celery.git
 [submodule "temp_config"]
 	path = temp_config
 	url = https://github.com/popenc/temp_config
