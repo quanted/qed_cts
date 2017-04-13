@@ -1,6 +1,5 @@
 # Hosts django project w/ uwsgi
 
-#FROM python:2.7
 FROM puruckertom/qed_py27
 
 # Install Python Dependencies
