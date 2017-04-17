@@ -10,23 +10,17 @@ calcs_routing = [
     # Handling different chat commands (websocket.receive is decoded and put
     # onto this channel) - routed on the "command" attribute of the decoded
     # message.
-    # route("chat.receive", chat_join, command="^join$"),
-    # route("chat.receive", chat_leave, command="^leave$"),
-    # route("chat.receive", chat_send, command="^send$"),
-    # route("chemaxon.receive", chemaxon_consumer, calc=r"^chemaxon$")
     route("chemaxon.receive", chemaxon_channel),
-    route("sparc.receive", sparc_channel),
-    route("epi.receive", epi_channel),
-    route("test.receive", test_channel),
-    route("measured.receive", measured_channel),
+    # route("sparc.receive", sparc_channel),
+    # route("epi.receive", epi_channel),
+    # route("test.receive", test_channel),
+    # route("measured.receive", measured_channel),
 ]
 
 channel_routing = [
     route("websocket.connect", ws_add),
     route("websocket.disconnect", ws_disconnect),
     route("websocket.receive", ws_receive),
-    # route("websocket.receive", consumers.ws_request_consumer, path=r'^/channels/(?P<service>[\w\-]+)/?$'),
-    # route("websocket.receive", ws_request_consumer, path=r'^/channels/?$'),
-    # route("some_channel", ws_request_consumer, path=r'^/achannel/?$'),
+    
     include(calcs_routing)  # include below custom routing
 ]

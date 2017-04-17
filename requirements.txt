@@ -5,6 +5,7 @@ requests
 celery
 channels
 django-parsley
+dotenv
 enum34
 flower
 html5lib==0.99

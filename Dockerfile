@@ -1,26 +1,22 @@
 # Build file for django with channels using asgi server daphne
 
-#FROM python:2.7
 FROM puruckertom/qed_py27
 
-# Install Python Dependencies
-# COPY requirements.txt /tmp/
+# Copy the project code
 COPY . /src/
+
+WORKDIR /src
+
+RUN useradd --system app
+RUN chown app:app /src
+
+# Install Python Dependencies
 RUN pip install --requirement /src/requirements.txt
 
-# Copy the project code
-#COPY . /src/
-WORKDIR /src
-#EXPOSE 8080
-
-# Ensure "docker_start" is executable
-#RUN chmod 755 /src/docker_start.sh
+USER app
 
 # Specific Docker-specific Django settings file (needed for collectstatic)
 ENV DJANGO_SETTINGS_MODULE="settings_docker"
 
 # Add project root to PYTHONPATH (needed to import custom Django settings)
 ENV PYTHONPATH="/src"
-
-# ENTRYPOINT ["sh /src/docker_start.sh"]
-#CMD ["sh", "/src/docker_start.sh"]
