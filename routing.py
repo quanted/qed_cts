@@ -10,6 +10,7 @@ calcs_routing = [
     # Handling different chat commands (websocket.receive is decoded and put
     # onto this channel) - routed on the "command" attribute of the decoded
     # message.
+    
     route("chemaxon.receive", chemaxon_channel),
     # route("sparc.receive", sparc_channel),
     # route("epi.receive", epi_channel),

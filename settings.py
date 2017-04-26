@@ -110,6 +110,8 @@ if os.environ.get('REDIS_PORT'):
 print "Using REDIS_HOSTNAME: {}".format(REDIS_PORT)
 print "Using REDIS_PORT: {}".format(REDIS_HOSTNAME)
 
+
+
 # Django Channels Layers
 CHANNEL_LAYERS = {
     "default": {
@@ -120,6 +122,7 @@ CHANNEL_LAYERS = {
         "ROUTING": "routing.channel_routing",
     }
 }
+
 
 
 # Database

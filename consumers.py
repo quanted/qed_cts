@@ -102,56 +102,48 @@ def measured_channel(payload):
     payload.reply_channel.send({'text': json.dumps(_response_data)})
 
 
-def parse_request_by_calc(payload):
-    """
-    Parsing request up by calculator, sending it
-    to the calc's channel
+# def parse_request_by_calc(payload):
+#     """
+#     Parsing request up by calculator, sending it
+#     to the calc's channel
 
-    Note: pay attention to how data comes back to client, previously
-    all props came back at once instead of one at a time despite
-    having a message.reply_channel for each prop...
-    """
+#     Note: pay attention to how data comes back to client, previously
+#     all props came back at once instead of one at a time despite
+#     having a message.reply_channel for each prop...
+#     """
 
-    if payload.get('service') == 'getSpeciationData':
-        # Channel("chemaxon.receive").send(_payload)
-        celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
-        return
+#     if payload.get('service') == 'getSpeciationData':
+#         Channel("chemaxon.receive").send(_payload)
+#         return
 
-    if payload.get('service') == 'getTransProducts':
-        # Channel("metabolizer.receive").send(_payload)
-        celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
-        return
+#     if payload.get('service') == 'getTransProducts':
+#         Channel("metabolizer.receive").send(_payload)
+#         return
 
-    for calc_name, props_list in payload['pchem_request'].items():
+#     for calc_name, props_list in payload['pchem_request'].items():
 
-        payload['calc'] = calc_name
+#         payload['calc'] = calc_name
 
-        for prop in props_list:
+#         for prop in props_list:
 
-            logging.info("PROP {} for {} calc".format(prop, calc_name))
-            payload['prop'] = prop
+#             logging.info("PROP {} for {} calc".format(prop, calc_name))
+#             payload['prop'] = prop
 
-            is_chemaxon = calc_name == 'chemaxon'
-            is_kow = prop == 'kow_no_ph' or prop == 'kow_wph'
+#             is_chemaxon = calc_name == 'chemaxon'
+#             is_kow = prop == 'kow_no_ph' or prop == 'kow_wph'
 
-            if is_chemaxon and is_kow:
-                for method in JchemCalc().methods:
-                    payload['method'] = method
-                    Channel("chemaxon.receive").send(payload)
-                    # celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
-            else:
-                if calc_name == 'chemaxon':
-                    Channel("chemaxon.receive").send(payload)  # send chemaxon request to chemaxon channel
-                    # celery_tasks.chemaxonTask.apply_async(args=[payload], queue="chemaxon")
-                elif calc_name == 'sparc':
-                    # Channel('sparc.receive').send(payload)
-                    celery_tasks.sparcTask.apply_async(args=[payload], queue="sparc")
-                elif calc_name == 'epi':
-                    # Channel('epi.receive').send(payload)
-                    celery_tasks.epiTask.apply_async(args=[payload], queue="epi")
-                elif calc_name == 'test':
-                    # Channel('test.receive').send(payload)
-                    celery_tasks.testTask.apply_async(args=[payload], queue="test")
-                elif calc_name == 'measured':
-                    # Channel('measured.receive').send(payload)
-                    celery_tasks.measuredTask.apply_async(args=[payload], queue="measured")
+#             if is_chemaxon and is_kow:
+#                 for method in JchemCalc().methods:
+#                     payload['method'] = method
+#                     Channel("chemaxon.receive").send(payload)
+#             else:
+#                 if calc_name == 'chemaxon':
+#                     Channel("chemaxon.receive").send(payload)  # send chemaxon request to chemaxon channel
+#                 elif calc_name == 'sparc':
+#                     Channel('sparc.receive').send(payload)
+#                 elif calc_name == 'epi':
+#                     Channel('epi.receive').send(payload)
+#                 elif calc_name == 'test':
+#                     Channel('test.receive').send(payload)
+#                 elif calc_name == 'measured':
+#                     Channel('measured.receive').send(payload)
