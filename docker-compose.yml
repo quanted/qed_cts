@@ -3,7 +3,7 @@
   collected_static: {}
  services:
 
-  # QED Django front-end
+  #  QED Django front-end
   qed_django:
     build: .
     image: qed-uwsgi-django:latest
