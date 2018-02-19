@@ -1,24 +1,51 @@
+[submodule "splash_app"]
+	path = splash_app
+	url = https://github.com/quanted/splash_app
+	branch = master
 [submodule "templates_qed"]
 	path = templates_qed
 	url = https://github.com/quanted/templates_qed.git
-[submodule "static_qed"]
-	path = static_qed
-	url = https://github.com/quanted/static_qed.git
+	branch = master
 [submodule "cts_app"]
 	path = cts_app
 	url = https://github.com/quanted/cts_app.git
-[submodule "splash_app"]
-	path = splash_app
-	url = https://github.com/quanted/splash_app.git
+[submodule "ubertool_app"]
+	path = ubertool_app
+	url = https://github.com/quanted/ubertool_app.git
+	branch = master
+[submodule "ubertool_ecorest"]
+	path = ubertool_ecorest
+	url = https://github.com/quanted/ubertool_ecorest.git
+[submodule "hwbi_app"]
+	path = hwbi_app
+	url = https://github.com/quanted/hwbi_app.git
+[submodule "pisces_app"]
+	path = pisces_app
+	url = https://github.com/quanted/pisces_app.git
+[submodule "hms_app"]
+	path = hms_app
+	url = https://github.com/quanted/hms_app.git
+[submodule "cyan_app"]
+	path = cyan_app
+	url = https://github.com/quanted/cyan_app.git
+[submodule "hem_app"]
+	path = hem_app
+	url = https://github.com/quanted/hem_app.git
 [submodule "temp_config"]
 	path = temp_config
-	url = https://github.com/popenc/temp_config
+	url = https://github.com/quanted/temp_config.git
 [submodule "cts_celery"]
 	path = cts_celery
-	url = https://github.com/popenc/cts_celery.git
+	url = https://github.com/quanted/cts_celery.git
 [submodule "cts_nodejs"]
 	path = cts_nodejs
-	url = https://github.com/popenc/cts_nodejs.git
-[submodule "cts_nginx"]
-	path = cts_nginx
-	url = https://github.com/popenc/cts_nginx.git
+	url = https://github.com/quanted/cts_nodejs.git
+[submodule "qed_nginx"]
+	path = qed_nginx
+	url = https://github.com/puruckertom/qed_nginx.git
+[submodule "static_qed"]
+	path = static_qed
+	url = https://github.com/quanted/static_qed.git
+[submodule "requirements_qed"]
+	path = requirements_qed
+	url = https://github.com/quanted/requirements_qed.git

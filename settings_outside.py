@@ -16,7 +16,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 from settings import *
 import os
-import sys
 
 print('settings_outside.py')
 
@@ -31,14 +30,6 @@ os.environ.update({
     'PROJECT_PATH': PROJECT_ROOT,
     'SITE_SKIN': 'EPA',                          # Leave empty ('') for default skin, 'EPA' for EPA skin
     'CONTACT_URL': 'https://www.epa.gov/research/forms/contact-us-about-epa-research',
-
-    # # CTS additions #
-    # 'CTS_EPI_SERVER': 'http://localhost:55342',  # port??
-    # 'CTS_EFS_SERVER': 'http://ca-test-1.cloudapp.net',
-    # 'CTS_JCHEM_SERVER': 'http://ca-test-1.cloudapp.net',
-    # 'CTS_SPARC_SERVER': 'http://204.46.160.69:8080',
-    # 'CTS_TEST_SERVER': '',
-    # # 'CTS_VERSION': '1.7'  # now at settings.py
 })
 DEBUG = True
 
@@ -51,16 +42,18 @@ DEBUG = True
 TEMPLATE_DEBUG = False
 
 if not os.environ.get('UBERTOOL_REST_SERVER'):
-    os.environ.update({'UBERTOOL_REST_SERVER': 'http://localhost:7777'})  # Local REST server
+    # Local REST server externally accessing intranet endpoints
+    os.environ.update({'UBERTOOL_REST_SERVER': 'http://localhost:7777'})
     print("REST backend = http://localhost:7777")
 
     # SECURITY WARNING: we keep the secret key in a shared dropbox directory
 try:
-    with open('secret_key_django_dropbox.txt') as f:
+    with open('secrets/secret_key_django_dropbox.txt') as f:
         SECRET_KEY = f.read().strip()
 except IOError as e:
-    print "Could not find secret file"
-    SECRET_KEY = 'Shhhhhhhhhhhhhhh'
+    print("Could not find secret file")
+    down_low = 'Shhhhhhhhhhhhhhh'
+    SECRET_KEY = down_low
 
 ALLOWED_HOSTS = [
 	'localhost',

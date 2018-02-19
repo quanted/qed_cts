@@ -1,18 +1,21 @@
- version: '2'
- volumes:
+version: '2.1'
+volumes:
   collected_static: {}
- services:
+services:
 
-  #  QED Django front-end
+  # QED Django front-end
   qed_django:
-    build: .
-    image: qed-uwsgi-django:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        version: ${VERSION:-latest}  # passing VERSION env var to Dockerfile as ARG, default = latest
+    image: quanted/qed:${VERSION:-latest}  # use qed image w/ tag = VERSION, default = latest
     expose:
       - "8080"
     volumes:
       - collected_static:/src/collected_static
       - .:/src  # map qed/ to container's /src for updating w/out rebuilding images
-    # command: . config/set_env_vars.sh ${QED_CONFIG}  # negates running env var script before docker-compose up
     environment:
       - REDIS_HOSTNAME=redis
       #these echo in the environmental variable to the running docker container
@@ -21,10 +24,6 @@
       #- DOCKER_SECRET_KEY=${SECRET_KEY}
     links:
       - redis
-    # command: [python, ./temp_config/set_environment.py, "python"]
-    # command: [sh, ./config/set_env_vars.sh, '']  # still have to point to env file somehow
-    # env_file:
-    #   - ./${QED_CONFIG} # path to config/.env file, container env vars, set with ./config/ bash or batch
 
   # Redis (message broker)
   redis:
@@ -35,8 +34,8 @@
 
   # ubertool_cts nodejs submodule
   cts_nodejs:
-    build: ../cts_nodejs
-    image: cts-nodejs:latest
+    build: ./cts_nodejs
+    image: cts-nodejs
     expose:
       - "4000"
     environment:
@@ -55,10 +54,9 @@
 
   # # Celery worker - ChemAxon calc
   worker_chemaxon:
-    build: ../cts_celery
-    image: cts-celery:latest
-    command: celery worker -A tasks -Q chemaxon -l info -n chemaxon_worker -c 2
-    # command: bash -c "sleep 3 && celery -A tasks worker -Q chemaxon --loglevel=info --concurrency=1 -n chemaxon_worker"
+    build: ./cts_celery
+    image: cts-celery
+    command: celery worker -A tasks -Q chemaxon -l info -n chemaxon_worker -c 1
     links:
       - redis
       - qed_django
@@ -71,8 +69,8 @@
 
   # # Celery worker - EPI Suite calc
   worker_epi:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q epi -l info -n epi_worker -c 1
     links:
       - redis
@@ -85,8 +83,8 @@
 
   # # Celery worker - TEST calc
   worker_test:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q test -l info -n test_worker -c 1
     links:
       - redis
@@ -98,8 +96,8 @@
 
   # # Celery worker - SPARC calc
   worker_sparc:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q sparc -l info -n sparc_worker -c 1
     links:
       - redis
@@ -111,8 +109,8 @@
 
   # # Celery worker - Measured (EPI) calc
   worker_measured:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q measured -l info -n measured_worker -c 1
     links:
       - redis
@@ -122,10 +120,10 @@
     # env_file:
     #   - ./${QED_CONFIG}
 
-  # # Celery worker - metabolizer calc
+  # # Celery worker - Metabolizer calc
   worker_metabolizer:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q metabolizer -l info -n metabolizer_worker -c 1
     links:
       - redis
@@ -137,8 +135,8 @@
 
   # # Celery worker - cheminfo calc
   worker_cheminfo:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q cheminfo -l info -n cheminfo_worker -c 1
     links:
       - redis
@@ -150,8 +148,8 @@
 
   # # Celery worker - manager calc
   worker_manager:
-    build: ../cts_celery
-    image: cts-celery:latest
+    build: ./cts_celery
+    image: cts-celery
     command: celery worker -A tasks -Q manager -l info -n manager_worker -c 1
     links:
       - redis
@@ -161,17 +159,72 @@
     # env_file:
     #   - ./${QED_CONFIG}
 
+  # # Celery worker - sam_worker
+  sam_worker:
+    build: ./ubertool_ecorest
+    #image: cts-celery:latest
+    command: celery worker -A tasks -c 1 -Q sam --loglevel=DEBUG -n sam_worker
+    volumes:
+      - ./ubertool_ecorest/ubertool/ubertool/sam/bin:/src/ubertool/ubertool/sam/bin
+    links:
+      - redis
+    environment:
+      - REDIS_HOSTNAME=redis
+      - DOCKER_HOSTNAME=${HOSTNAME}
+#    env_file:
+#      - ./${QED_CONFIG}
+
+  # Update for Celery: celery_worker and redis
+  # rename to worker_flask
+#  celery_worker:
+#    build: ./celery_qed
+#    image: stack-celery
+#    command: celery worker -A tasks -Q testing -l info
+#    links:
+#      - redis
+#      - ecorest
+#    environment:
+#      - REDIS_HOSTNAME=redis
+#      - DOCKER_HOSTNAME=${HOSTNAME}
+
+
   qed_nginx:
     restart: always
-    build: ../cts_nginx
+    # build: ../cts_nginx
+    build: ./qed_nginx
     ports:
       - "80:80"
       - "443:443"
     links:
       - qed_django:uwsgi_django  # Nginx.conf can reference "qed_django" service with the hostname 'uwsgi' or 'qed_django'
       - cts_nodejs:cts_nodejs
-      # - ecorest:uwsgi_flask
+      - ecorest:uwsgi_flask
+    #  - hwbi_rest
     volumes:
       - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
     volumes_from:
       - qed_django:ro  # Mount all volumes from "qed_django" to NGINX, so it can access the collected static files
+
+
+  # ubertool_ecorest Flask back-end
+  ecorest:
+    build: ./ubertool_ecorest
+    expose:
+      - "7777"
+    links:
+      - redis
+      - sam_worker
+    environment:
+      - REDIS_HOSTNAME=redis
+      - DOCKER_HOSTNAME=${HOSTNAME}
+    volumes:
+      - ./ubertool_ecorest/ubertool/ubertool/sam/bin:/src/ubertool/ubertool/sam/bin
+    # command: celery worker -A tasks -Q manager -l info -n manager_worker -c 1
+    # command: celery worker -A tasks -c 1 -Q sam --loglevel=DEBUG -n sam_worker
+    #depends_on:
+    #  - "redis"
+
+  #hwbi_rest:
+  #  build: ../hwbi_rest/src/hwbi_rest
+  #  expose:
+  #    - "8888"

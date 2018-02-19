@@ -1,3 +1,7 @@
+.metadata/
+.settings/
+.DS_store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -90,6 +94,9 @@ ENV/
 
 # QED settings
 secret_key_django_dropbox.txt
+secret_key_login.txt
+secret_key_database.txt
+secrets/
 
 # DB stuff
 *.sqlite3
@@ -99,3 +106,4 @@ secret_key_django_dropbox.txt
 
 # pycharm stuff
 .idea
+

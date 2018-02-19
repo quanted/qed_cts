@@ -1,4 +1,7 @@
-QED_CTS
+qed
 ============
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a1fd97e96a6479a859d91f9f8eae885)](https://www.codacy.com/app/puruckertom/qed_cts?utm_source=github.com&utm_medium=referral&utm_content=quanted/qed_cts&utm_campaign=badger)
-[![Code Issues](https://www.quantifiedcode.com/api/v1/project/ede4855701e0424d97f5586afeb7a1ef/badge.svg)](https://www.quantifiedcode.com/app/project/ede4855701e0424d97f5586afeb7a1ef)
+This contains the main django project that serves a number of EPA apps for the public site https://qed.epa.gov/ and the EPA internal site https://qedinternal.epa.gov/. Click the wiki link above for more information.
+
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8da2b7009c0b4e3db24473c813b56005)](https://www.codacy.com/app/puruckertom/qed?utm_source=github.com&utm_medium=referral&utm_content=quanted/qed&utm_campaign=badger)
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/d262843a493543e1ab99323f0d620f9d/badge.svg)](https://www.quantifiedcode.com/app/project/d262843a493543e1ab99323f0d620f9d)
