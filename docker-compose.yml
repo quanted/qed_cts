@@ -63,8 +63,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - EPI Suite calc
   worker_epi:
@@ -76,8 +74,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
 
   # # Celery worker - TEST calc
@@ -90,8 +86,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - SPARC calc
   worker_sparc:
@@ -103,8 +97,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - Measured (EPI) calc
   worker_measured:
@@ -116,8 +108,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - Metabolizer calc
   worker_metabolizer:
@@ -129,8 +119,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - cheminfo calc
   worker_cheminfo:
@@ -142,8 +130,6 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   # # Celery worker - manager calc
   worker_manager:
@@ -155,13 +141,10 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
-    # env_file:
-    #   - ./${QED_CONFIG}
 
   qed_nginx:
     restart: always
-    # build: ../cts_nginx
-    build: ./qed_nginx
+    build: ./cts_nginx
     ports:
       - "80:80"
       - "443:443"

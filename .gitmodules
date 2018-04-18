@@ -49,3 +49,6 @@
 [submodule "requirements_qed"]
 	path = requirements_qed
 	url = https://github.com/quanted/requirements_qed.git
+[submodule "cts_nginx"]
+	path = cts_nginx
+	url = https://github.com/quanted/cts_nginx
