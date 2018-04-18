@@ -51,6 +51,7 @@ TEMPLATES = [
             os.path.join(TEMPLATE_ROOT, 'misc'),
             os.path.join(TEMPLATE_ROOT, 'pisces'),
             os.path.join(TEMPLATE_ROOT, 'pop'),
+            os.path.join(TEMPLATE_ROOT, 'pram_qaqc_reports'),
             os.path.join(TEMPLATE_ROOT, 'sam'),
             os.path.join(TEMPLATE_ROOT, 'splash'),
             os.path.join(TEMPLATE_ROOT, 'uber2017'),
@@ -93,23 +94,24 @@ INSTALLED_APPS = (
     'hms_app',  # hms django app
     'hwbi_app',  # hwbi django app
     'pisces_app',  # pisces django app
+    'pram_app',  # pram django app
     #'pop_app',  # pop django app
     #'rest_framework',
     #'sam_app',  # sam django app
     'splash_app',  # splash django app
-    'ubertool_app',  # ubertool django app
+    # 'ubertool_app',  # ubertool django app
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     #'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 MIDDLEWARE_CLASSES = [
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
