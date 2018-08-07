@@ -43,12 +43,12 @@
 [submodule "qed_nginx"]
 	path = qed_nginx
 	url = https://github.com/puruckertom/qed_nginx.git
-[submodule "static_qed"]
-	path = static_qed
-	url = https://github.com/quanted/static_qed.git
 [submodule "requirements_qed"]
 	path = requirements_qed
 	url = https://github.com/quanted/requirements_qed.git
 [submodule "cts_nginx"]
 	path = cts_nginx
 	url = https://github.com/quanted/cts_nginx
+[submodule "static_qed"]
+	path = static_qed
+	url = https://github.com/quanted/static_qed
