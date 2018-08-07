@@ -24,6 +24,14 @@ NODEJS_HOST = 'nginx'  # default nodejs hostname
 NODEJS_PORT = 80  # default nodejs port
 # todo: look into ws w/ django 1.10
 
+if not os.environ.get('IS_PUBLIC'):
+    DEBUG = True
+else:
+    if os.environ.get('IS_PUBLIC') == "True":
+        DEBUG = False
+    else:
+        DEBUG = True
+print("DEBUG: " + str(DEBUG))
 IS_PUBLIC = False
 IS_DEVELOPMENT = True
 
@@ -57,6 +65,7 @@ TEMPLATES = [
             os.path.join(TEMPLATE_ROOT, 'uber2017'),
             os.path.join(TEMPLATE_ROOT, 'uber2011'),
             os.path.join(TEMPLATE_ROOT, 'uberqaqc'),
+            os.path.join("/src", "collected_static")
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -89,17 +98,18 @@ INSTALLED_APPS = (
     'cts_app.filters',  # cts filters for pchem table
     'cts_app.cts_api',
     'cts_app.cts_testing',
-    'cyan_app',  # cyan django app
+    # 'cyan_app',  # cyan django app
     # 'hem_app',  # hem django app
-    'hms_app',  # hms django app
-    'hwbi_app',  # hwbi django app
-    'pisces_app',  # pisces django app
-    'pram_app',  # pram django app
+    # 'hms_app',  # hms django app
+    # 'hwbi_app',  # hwbi django app
+    # 'pisces_app',  # pisces django app
+    # 'pram_app',  # pram django app
     #'pop_app',  # pop django app
     #'rest_framework',
     #'sam_app',  # sam django app
     'splash_app',  # splash django app
     # 'ubertool_app',  # ubertool django app
+    # 'wqt_app',  # ubertool django app
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -148,27 +158,27 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
     },
-    'hem_db': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'hem_app/hem_db.sqlite3'),
-    },
-    'hwbi_db': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'hwbi_app/hwbi_db_v2.sqlite3'),
-    },
-    'pisces_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pisces',
-        'USER': 'cgifadmin',
-        'PASSWORD': DB_PASS,
-        'HOST': '172.20.100.15',
-        'PORT': '5432',
-    }
+    # 'hem_db': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(PROJECT_ROOT, 'hem_app/hem_db.sqlite3'),
+    # },
+    # 'hwbi_db': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(PROJECT_ROOT, 'hwbi_app/hwbi_db_v2.sqlite3'),
+    # },
+    # 'pisces_db': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'pisces',
+    #     'USER': 'cgifadmin',
+    #     'PASSWORD': DB_PASS,
+    #     'HOST': '172.20.100.15',
+    #     'PORT': '5432',
+    # }
 }
 
-DATABASE_ROUTERS = {'routers.HemRouter',
-                    'routers.HwbiRouter',
-                    'routers.PiscesRouter'}
+# DATABASE_ROUTERS = {'routers.HemRouter',
+#                     'routers.HwbiRouter',
+#                     'routers.PiscesRouter'}
 
 # Setups databse-less test runner (Only needed for running test)
 #TEST_RUNNER = 'testing.DatabaselessTestRunner'

@@ -5,12 +5,12 @@ services:
 
   # QED Django front-end
   qed_django:
-    # build:
-    #  context: .
-    #  dockerfile: Dockerfile
-    #  args:
-    #    version: ${VERSION:-latest}  # passing VERSION env var to Dockerfile as ARG, default = latest
-    image: quanted/qed:${VERSION:-latest}  # use qed image w/ tag = VERSION, default = latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        version: ${VERSION:-latest}  # passing VERSION env var to Dockerfile as ARG, default = latest
+    #image: quanted/qed:${VERSION:-latest}  # use qed image w/ tag = VERSION, default = latest
     expose:
       - "8080"
     volumes:
@@ -63,6 +63,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - EPI Suite calc
   worker_epi:
@@ -74,6 +76,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
 
   # # Celery worker - TEST calc
@@ -86,6 +90,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - SPARC calc
   worker_sparc:
@@ -97,6 +103,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - Measured (EPI) calc
   worker_measured:
@@ -108,6 +116,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - Metabolizer calc
   worker_metabolizer:
@@ -119,6 +129,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - cheminfo calc
   worker_cheminfo:
@@ -130,6 +142,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   # # Celery worker - manager calc
   worker_manager:
@@ -141,10 +155,13 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
+    # env_file:
+    #   - ./${QED_CONFIG}
 
   qed_nginx:
     restart: always
-    build: ./cts_nginx
+    # build: ../cts_nginx
+    build: ./qed_nginx
     ports:
       - "80:80"
       - "443:443"
@@ -152,8 +169,66 @@ services:
       - qed_django:uwsgi_django  # Nginx.conf can reference "qed_django" service with the hostname 'uwsgi' or 'qed_django'
       - cts_nodejs:cts_nodejs
       - qed_flask:uwsgi_flask
-      - qed_flower:uwsgi_flower
     volumes:
       - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
     volumes_from:
       - qed_django:ro  # Mount all volumes from "qed_django" to NGINX, so it can access the collected static files
+
+  # # flask_qed Flask back-end
+  # qed_flask:
+  #   build: ./flask_qed
+  #   expose:
+  #     - "7777"
+  #   links:
+  #     - redis
+  #     - mongodb
+  #     - qed_celery
+  #   environment:
+  #     - REDIS_HOSTNAME=redis
+  #     - DOCKER_HOSTNAME=${HOSTNAME}
+  #   volumes:
+  #     - /var/www/sampreprocessed:/src/pram_flask/ubertool/ubertool/sam/bin/Preprocessed
+  #     - /var/www/samresults:/src/pram_flask/ubertool/ubertool/sam/bin/Results
+  #     - /var/www/qed-basins:/src/hms_flask/data/qed-basins
+  #     - collected_static:/src/collected_static
+  #   depends_on:
+  #     - mongodb
+  #   logging:
+  #     options:
+  #       max-size: "200k"
+  #       max-file: "10"
+
+  # # mongoDB database container
+  # mongodb:
+  #   image: mongo:latest
+  #   volumes:
+  #     - /var/www/mongodb:/data/db
+  #   expose:
+  #     - "27017"
+
+  # # Celery container for async task execution
+  # qed_celery:
+  #   build: ./flask_qed
+  #   volumes:
+  #     - /var/www/sampreprocessed:/src/pram_flask/ubertool/ubertool/sam/bin/Preprocessed
+  #     - /var/www/samresults:/src/pram_flask/ubertool/ubertool/sam/bin/Results
+  #     - /var/www/qed-basins:/src/hms_flask/data/qed-basins
+  #     - collected_static:/src/collected_static
+  #   links:
+  #     - redis
+  #     - mongodb
+  #   command: celery worker -A celery_cgi -Q qed --loglevel=INFO -c 2 -n qed_worker
+  #   environment:
+  #     - REDIS_HOSTNAME=redis
+  #     - DOCKER_HOSTNAME=${HOSTNAME}
+  #   logging:
+  #     options:
+  #       max-size: "200k"
+  #       max-file: "10"
+
+  # hms_dotnetcore:
+  #   build:
+  #     context: ./windows/hms
+  #     dockerfile: Web.Services/Dockerfile
+  #   ports:
+  #    - "7778:80"
