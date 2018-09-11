@@ -186,8 +186,8 @@ services:
     image: cts_tomcat:dev
     expose:
       - "8080"
-    # ports:
-    #   - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xmx1g
     volumes:
       - ./cts_tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
       - ./cts_tomcat/webapps:/usr/local/tomcat/webapps
