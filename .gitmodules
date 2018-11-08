@@ -42,7 +42,7 @@
 	url = https://github.com/quanted/cts_nodejs.git
 [submodule "qed_nginx"]
 	path = qed_nginx
-	url = https://github.com/puruckertom/qed_nginx.git
+	url = https://github.com/quanted/qed_nginx
 [submodule "requirements_qed"]
 	path = requirements_qed
 	url = https://github.com/quanted/requirements_qed
