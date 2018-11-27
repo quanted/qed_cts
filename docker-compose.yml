@@ -19,10 +19,8 @@ services:
     environment:
       - REDIS_HOSTNAME=redis
       #these echo in the environmental variable to the running docker container
-      #so that is can be picked up by the django settings 
-      # - DOCKER_HOSTNAME=${HOSTNAME}
+      #so that is can be picked up by the django settings
       - DOCKER_HOSTNAME=docker
-      #- DOCKER_SECRET_KEY=${SECRET_KEY}
     links:
       - redis
       - cts-tomcat
@@ -55,7 +53,6 @@ services:
       dockerfile: Dockerfile
       args:
         version: ${VERSION:-latest}
-    # build: ./cts_celery
     image: cts-celery
     command: celery worker -A tasks -Q manager_queue -l info -n manager_worker -c 1
     links:
@@ -71,7 +68,6 @@ services:
       dockerfile: Dockerfile
       args:
         version: ${VERSION:-latest}
-    # build: ./cts_celery
     image: cts-celery
     command: celery worker -A tasks -Q cts_queue -l info -n cts_worker -c 2
     links:

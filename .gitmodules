@@ -52,3 +52,6 @@
 [submodule "static_qed"]
 	path = static_qed
 	url = https://github.com/quanted/static_qed
+[submodule "cts_stress"]
+	path = cts_stress
+	url = https://github.com/quanted/cts_stress
