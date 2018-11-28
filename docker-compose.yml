@@ -88,6 +88,7 @@ services:
     links:
       - qed_django:uwsgi_django  # Nginx.conf can reference "qed_django" service with the hostname 'uwsgi' or 'qed_django'
       - cts_nodejs:cts_nodejs
+      - cts_stress:cts_stress
     volumes:
       - /var/www/nginx/certs:/etc/nginx/qed # this points to the keys directory
     volumes_from:
@@ -107,3 +108,14 @@ services:
       - ./cts_tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
       - ./cts_tomcat/webapps:/usr/local/tomcat/webapps
       - ./cts_tomcat/chemaxon/licenses:/home/tomcat/.chemaxon/licenses
+
+  cts_stress:
+    build:
+      context: ./cts_stress
+      dockerfile: Dockerfile
+    image: cts_stress:dev
+    ports:
+      - "4001:80"
+    environment:
+      - STRESS_SERVER_HOST=cts_stress
+      - STRESS_SERVER_PORT=80
