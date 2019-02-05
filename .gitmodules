@@ -55,3 +55,6 @@
 [submodule "cts_stress"]
 	path = cts_stress
 	url = https://github.com/quanted/cts_stress
+[submodule "qed_tomcat"]
+	path = qed_tomcat
+	url = https://github.com/quanted/qed_tomcat
