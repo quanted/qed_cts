@@ -103,10 +103,6 @@ secrets/
 
 # CTS related
 *.cxl
-tomcat-users.xml
-licenses/
-*.war
-webapps/
 
 
 # pycharm stuff
