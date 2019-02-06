@@ -96,9 +96,9 @@ services:
 
   qed-tomcat:
     build:
-      context: ./qed_tomcat
-      dockerfile: Dockerfile
-    image: qed_tomcat:${VERSION:-latest}
+      context: .
+      dockerfile: Dockerfile_Tomcat
+    # image: qed_tomcat:${VERSION:-latest}
     expose:
       - "8080"
     environment:
