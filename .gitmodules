@@ -55,3 +55,6 @@
 [submodule "cts_stress"]
 	path = cts_stress
 	url = https://github.com/quanted/cts_stress
+[submodule "OPERAWS"]
+	path = OPERAWS
+	url = https://github.com/popenc/OPERAWS
