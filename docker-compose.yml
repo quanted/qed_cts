@@ -24,6 +24,7 @@ services:
     links:
       - redis
       - qed-tomcat
+      # - operaws
 
   # Redis (message broker)
   redis:
@@ -74,6 +75,7 @@ services:
       - redis
       - qed_django
       - qed-tomcat
+      # - operaws
     environment:
       - REDIS_HOSTNAME=redis
       - DOCKER_HOSTNAME=${HOSTNAME}
@@ -95,6 +97,7 @@ services:
       - qed_django:ro  # Mount all volumes from "qed_django" to NGINX, so it can access the collected static files
 
   qed-tomcat:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile_Tomcat
@@ -102,11 +105,27 @@ services:
     expose:
       - "8080"
     environment:
-      - JAVA_OPTS=-Xmx512m
+      - JAVA_OPTS=-Xmx2g
     volumes:
       - ./secrets/tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
       - ./secrets/tomcat/webapps:/usr/local/tomcat/webapps
       - ./secrets/tomcat/chemaxon/licenses:/home/tomcat/.chemaxon/licenses
+
+  # operaws:
+  #   build:
+  #     context: ./OPERAWS
+  #     dockerfile: Dockerfile
+  #   expose:
+  #     - "3344"
+  #   environment:
+  #     - HOSTNAME=docker
+
+  mongodb:
+    image: mongo:latestgi
+    volumes:
+      - /var/www/mongodb:/data/db
+    expose:
+      - "27017"
 
   # cts_stress:
   #   build:
