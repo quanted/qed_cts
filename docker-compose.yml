@@ -121,7 +121,7 @@ services:
   #     - HOSTNAME=docker
 
   mongodb:
-    image: mongo:latestgi
+    image: mongo:latest
     volumes:
       - /var/www/mongodb:/data/db
     expose:
