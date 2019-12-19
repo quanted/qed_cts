@@ -74,6 +74,7 @@ ALLOWED_HOSTS = []
 if HOSTNAME == "UberTool-Dev":
     ALLOWED_HOSTS.append('172.16.0.4')
     ALLOWED_HOSTS.append('qed.epacdx.net')
+    ALLOWED_HOSTS.append('qeddev.epacdx.net')
 else:
     ALLOWED_HOSTS.append('127.0.0.1')
     ALLOWED_HOSTS.append('localhost')
