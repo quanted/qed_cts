@@ -4,3 +4,7 @@ node_modules
 *.cxl
 */*/*/*/bin/Preprocessed*
 */*/*/*/bin/Results*
+OPERAWS/
+cts_nodejs/
+cts_celery/
+docker-compose.yml
