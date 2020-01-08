@@ -91,6 +91,7 @@ else:
     ALLOWED_HOSTS.append('qedinternal.edap-cluster.com')
     ALLOWED_HOSTS.append('qed.edap-cluster.com')
     ALLOWED_HOSTS.append('qedblue.edap-cluster.com')
+    ALLOWED_HOSTS.append('qeddev.epacdx.net')
 
 
 
