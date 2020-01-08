@@ -20,7 +20,7 @@ services:
       - REDIS_HOSTNAME=redis
       #these echo in the environmental variable to the running docker container
       #so that is can be picked up by the django settings
-      - DOCKER_HOSTNAME=docker
+      - DOCKER_HOSTNAME=${HOSTNAME:-docker}
     links:
       - redis
       - qed-tomcat
@@ -60,7 +60,7 @@ services:
       - redis
     environment:
       - REDIS_HOSTNAME=redis
-      - DOCKER_HOSTNAME=${HOSTNAME}
+      - DOCKER_HOSTNAME=${HOSTNAME:-docker}
 
   # # Celery worker - CTS calc
   worker_cts:
@@ -78,7 +78,7 @@ services:
       # - operaws
     environment:
       - REDIS_HOSTNAME=redis
-      - DOCKER_HOSTNAME=${HOSTNAME}
+      - DOCKER_HOSTNAME=${HOSTNAME:-docker}
 
   qed_nginx:
     restart: always
