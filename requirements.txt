@@ -5,7 +5,7 @@ celery
 django-parsley
 enum34
 flower
-html5lib==0.99
+html5lib==0.99999999
 pytz
 reportlab
 xhtml2pdf==0.1b2
